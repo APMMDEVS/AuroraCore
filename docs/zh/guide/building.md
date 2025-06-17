@@ -23,7 +23,7 @@
 ### 1. 克隆仓库
 
 ```bash
-git clone https://github.com/your-username/AuroraCore.git
+git clone https://github.com/APMMDEVS/AuroraCore.git
 cd AuroraCore
 ```
 
@@ -429,7 +429,7 @@ cmake .. -DUSE_PRECOMPILED_HEADERS=ON
 
 1. 查看本指南的常见解决方案
 2. 查阅[常见问题](/zh/guide/faq)进行故障排除
-3. 搜索 [GitHub Issues](https://github.com/your-username/AuroraCore/issues)
+3. 搜索 [GitHub Issues](https://github.com/APMMDEVS/AuroraCore/issues)
 4. 创建新问题并包含：
    - 构建环境详细信息
    - 完整错误消息

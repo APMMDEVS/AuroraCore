@@ -23,7 +23,7 @@ Complete guide for building AuroraCore from source code on different platforms a
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/your-username/AuroraCore.git
+git clone https://github.com/APMMDEVS/AuroraCore.git
 cd AuroraCore
 ```
 
@@ -429,7 +429,7 @@ If you encounter build issues:
 
 1. Check this guide for common solutions
 2. Review [FAQ](/guide/faq) for troubleshooting
-3. Search [GitHub Issues](https://github.com/your-username/AuroraCore/issues)
+3. Search [GitHub Issues](https://github.com/APMMDEVS/AuroraCore/issues)
 4. Create a new issue with:
    - Build environment details
    - Complete error messages

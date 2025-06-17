@@ -393,8 +393,8 @@ If you can't find the answer here:
 
 1. **Check the documentation**: [API Reference](/api/)
 2. **Review examples**: [Basic Usage](/examples/basic-usage)
-3. **Search issues**: [GitHub Issues](https://github.com/your-username/AuroraCore/issues)
-4. **Ask questions**: [GitHub Discussions](https://github.com/your-username/AuroraCore/discussions)
+3. **Search issues**: [GitHub Issues](https://github.com/APMMDEVS/AuroraCore/issues)
+4. **Ask questions**: [GitHub Discussions](https://github.com/APMMDEVS/AuroraCore/discussions)
 
 ## 🔗 Related Documentation
 

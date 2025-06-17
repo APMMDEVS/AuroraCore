@@ -147,4 +147,4 @@ For API-specific questions:
 - Check the detailed API documentation for each component
 - Review the [FAQ](/guide/faq) for common issues
 - Browse [examples](/examples/basic-usage) for usage patterns
-- Submit issues on [GitHub](https://github.com/your-username/AuroraCore/issues)
+- Submit issues on [GitHub](https://github.com/APMMDEVS/AuroraCore/issues)

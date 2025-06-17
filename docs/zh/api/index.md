@@ -147,4 +147,4 @@ struct FileWatcherConfig {
 - 查看每个组件的详细 API 文档
 - 查阅[常见问题](/zh/guide/faq)了解常见问题
 - 浏览[示例](/zh/examples/basic-usage)了解使用模式
-- 在 [GitHub](https://github.com/your-username/AuroraCore/issues) 上提交问题
+- 在 [GitHub](https://github.com/APMMDEVS/AuroraCore/issues) 上提交问题

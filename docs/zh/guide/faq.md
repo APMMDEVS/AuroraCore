@@ -10,7 +10,7 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/your-username/AuroraCore.git
+git clone https://github.com/APMMDEVS/AuroraCore.git
 cd AuroraCore
 
 # 创建构建目录
@@ -615,8 +615,8 @@ target_include_directories(your_target PRIVATE
    - [API 参考](/zh/api/)
 
 2. **搜索已知问题**：
-   - [GitHub Issues](https://github.com/your-username/AuroraCore/issues)
-   - [讨论区](https://github.com/your-username/AuroraCore/discussions)
+   - [GitHub Issues](https://github.com/APMMDEVS/AuroraCore/issues)
+   - [讨论区](https://github.com/APMMDEVS/AuroraCore/discussions)
 
 ### 💬 社区支持
 
@@ -634,8 +634,8 @@ target_include_directories(your_target PRIVATE
 ### 📧 联系方式
 
 - **邮箱**: support@AuroraCore.com
-- **GitHub**: [@your-username](https://github.com/your-username)
-- **文档**: [https://your-username.github.io/AuroraCore](https://your-username.github.io/AuroraCore)
+- **GitHub**: [@APMMDEVS](https://github.com/APMMDEVS)
+- **文档**: [https://APMMDEVS.github.io/AuroraCore](https://APMMDEVS.github.io/AuroraCore)
 
 ---
 
