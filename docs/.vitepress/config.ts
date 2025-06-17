@@ -122,7 +122,7 @@ export default defineConfig({
   
   // 主题配置
   themeConfig: {
-    logo: '/logo.svg',
+    logo: '.public/logo.svg',
     siteTitle: 'AuroraCore',
     
     // 搜索

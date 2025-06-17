@@ -6,7 +6,7 @@ hero:
   text: "Android Root 日志系统与文件监听工具"
   tagline: 专为Android root环境设计的高性能日志记录和文件监控解决方案
   image:
-    src: /logo.svg
+    src: ../.vitepress/public/logo.svg
     alt: AuroraCore
   actions:
     - theme: brand

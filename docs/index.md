@@ -6,7 +6,7 @@ hero:
   text: "Android Root Logger & File Watcher"
   tagline: High-performance logging and file monitoring solution designed specifically for Android root environment
   image:
-    src: /logo.svg
+    src: ./.vitepress/public/logo.svg
     alt: AuroraCore
   actions:
     - theme: brand
