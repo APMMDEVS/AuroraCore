@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Performance and Power Efficiency Test Script
-# Tests the power-saving features and performance of AMMF3-Core
+# Tests the power-saving features and performance of AuroraCore
 
 set -e
 
-echo "=== AMMF3-Core Performance Test ==="
+echo "=== AuroraCore Performance Test ==="
 echo "Testing power efficiency and performance characteristics"
 echo
 
@@ -17,7 +17,7 @@ if [ ! -f "build/src/logger/logger_daemon" ]; then
 fi
 
 # Test configuration
-TEST_DIR="/tmp/ammf3_perf_test"
+TEST_DIR="/tmp/AuroraCore_perf_test"
 LOG_FILE="$TEST_DIR/perf_test.log"
 SOCKET_PATH="$TEST_DIR/perf_logger"
 NUM_MESSAGES=10000

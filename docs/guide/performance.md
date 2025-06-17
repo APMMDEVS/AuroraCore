@@ -1,10 +1,10 @@
 # Performance Optimization Guide
 
-This guide covers performance optimization techniques for AMMF3-Core components to ensure efficient operation in Android root environments.
+This guide covers performance optimization techniques for AuroraCore components to ensure efficient operation in Android root environments.
 
 ## 📊 Overview
 
-AMMF3-Core is designed for high-performance logging and file monitoring. Proper configuration and usage patterns can significantly impact system performance, battery life, and resource utilization.
+AuroraCore is designed for high-performance logging and file monitoring. Proper configuration and usage patterns can significantly impact system performance, battery life, and resource utilization.
 
 ## 🚀 Logger Performance Optimization
 

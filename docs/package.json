@@ -1,7 +1,7 @@
 {
-  "name": "ammf3-core-docs",
+  "name": "AuroraCore-docs",
   "version": "1.0.0",
-  "description": "Documentation for AMMF3-Core project",
+  "description": "Documentation for AuroraCore project",
   "type": "module",
   "scripts": {
     "dev": "vitepress dev",

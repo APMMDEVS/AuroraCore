@@ -1,10 +1,10 @@
-# AMMF3-Core
+# AuroraCore
 
-[![Build Status](https://github.com/Aurora-Nasa-1/AMMF3-Core/workflows/CI/badge.svg)](https://github.com/Aurora-Nasa-1/AMMF3-Core/actions)
-[![Documentation](https://img.shields.io/badge/docs-VitePress-blue)](https://Aurora-Nasa-1.github.io/AMMF3-Core/)
+[![Build Status](https://github.com/Aurora-Nasa-1/AuroraCore/workflows/CI/badge.svg)](https://github.com/Aurora-Nasa-1/AuroraCore/actions)
+[![Documentation](https://img.shields.io/badge/docs-VitePress-blue)](https://Aurora-Nasa-1.github.io/AuroraCore/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-AMMF3-Core 是一个高性能的 Android root 日志记录和文件监控框架，专为系统级应用和服务设计。
+AuroraCore 是一个高性能的 Android root 日志记录和文件监控框架，专为系统级应用和服务设计。
 
 ## 🚀 特性
 
@@ -19,15 +19,15 @@ AMMF3-Core 是一个高性能的 Android root 日志记录和文件监控框架�
 
 完整的文档可在以下地址查看：
 
-- **[在线文档](https://Aurora-Nasa-1.github.io/AMMF3-Core/)** - 完整的 API 参考和使用指南
+- **[在线文档](https://Aurora-Nasa-1.github.io/AuroraCore/)** - 完整的 API 参考和使用指南
 - **[快速开始](/docs/guide/getting-started.md)** - 快速入门指南
 - **[API 参考](/docs/api/)** - 详细的 API 文档
 - **[示例代码](/docs/examples/)** - 实际使用示例
 
 ### 文档语言
 
-- [English Documentation](https://Aurora-Nasa-1.github.io/AMMF3-Core/)
-- [中文文档](https://Aurora-Nasa-1.github.io/AMMF3-Core/zh/)
+- [English Documentation](https://Aurora-Nasa-1.github.io/AuroraCore/)
+- [中文文档](https://Aurora-Nasa-1.github.io/AuroraCore/zh/)
 
 ## 🛠️ 快速开始
 
@@ -42,8 +42,8 @@ AMMF3-Core 是一个高性能的 Android root 日志记录和文件监控框架�
 
 ```bash
 # 克隆仓库
-git clone https://github.com/Aurora-Nasa-1/AMMF3-Core.git
-cd AMMF3-Core
+git clone https://github.com/Aurora-Nasa-1/AuroraCore.git
+cd AuroraCore
 
 # 设置 Android NDK 路径
 export ANDROID_NDK=/path/to/android-ndk
@@ -137,7 +137,7 @@ int main() {
 ## 🏗️ 架构
 
 ```
-AMMF3-Core/
+AuroraCore/
 ├── logger/              # 核心日志记录引擎
 ├── loggerAPI/           # C++ 日志 API
 ├── filewatcher/         # 核心文件监控引擎
@@ -168,9 +168,9 @@ make tests
 
 ## 📞 支持
 
-- **问题报告**: [GitHub Issues](https://github.com/Aurora-Nasa-1/AMMF3-Core/issues)
-- **功能请求**: [GitHub Discussions](https://github.com/Aurora-Nasa-1/AMMF3-Core/discussions)
-- **文档**: [在线文档](https://Aurora-Nasa-1.github.io/AMMF3-Core/)
+- **问题报告**: [GitHub Issues](https://github.com/Aurora-Nasa-1/AuroraCore/issues)
+- **功能请求**: [GitHub Discussions](https://github.com/Aurora-Nasa-1/AuroraCore/discussions)
+- **文档**: [在线文档](https://Aurora-Nasa-1.github.io/AuroraCore/)
 
 ## 🔗 相关链接
 

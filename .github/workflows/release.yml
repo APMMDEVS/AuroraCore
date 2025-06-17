@@ -62,7 +62,7 @@ jobs:
         find artifacts/${{ matrix.arch }}/ -type f -executable -exec strip {} \; 2>/dev/null || true
         
         # Create version info file
-        echo "AMMF3-Core Release ${{ github.ref_name }}" > artifacts/${{ matrix.arch }}/VERSION
+        echo "AuroraCore Release ${{ github.ref_name }}" > artifacts/${{ matrix.arch }}/VERSION
         echo "Architecture: ${{ matrix.arch }}" >> artifacts/${{ matrix.arch }}/VERSION
         echo "Build Date: $(date -u)" >> artifacts/${{ matrix.arch }}/VERSION
         echo "Commit: ${{ github.sha }}" >> artifacts/${{ matrix.arch }}/VERSION
@@ -91,19 +91,19 @@ jobs:
         # Create ARM64 release package
         if [ -d "artifacts/release-binaries-arm64-v8a" ]; then
           cd artifacts/release-binaries-arm64-v8a
-          tar -czf ../../release/ammf3-core-${{ github.ref_name }}-arm64-v8a.tar.gz arm64-v8a/
+          tar -czf ../../release/AuroraCore-${{ github.ref_name }}-arm64-v8a.tar.gz arm64-v8a/
           cd ../..
         fi
         
         # Create x86_64 release package
         if [ -d "artifacts/release-binaries-x86_64" ]; then
           cd artifacts/release-binaries-x86_64
-          tar -czf ../../release/ammf3-core-${{ github.ref_name }}-x86_64.tar.gz x86_64/
+          tar -czf ../../release/AuroraCore-${{ github.ref_name }}-x86_64.tar.gz x86_64/
           cd ../..
         fi
         
         # Create combined package with both architectures
-        tar -czf release/ammf3-core-${{ github.ref_name }}-all-architectures.tar.gz \
+        tar -czf release/AuroraCore-${{ github.ref_name }}-all-architectures.tar.gz \
           -C artifacts/ \
           release-binaries-arm64-v8a/arm64-v8a/ \
           release-binaries-x86_64/x86_64/ 2>/dev/null || true
@@ -124,12 +124,12 @@ jobs:
           release/*.tar.gz
           release/checksums.sha256
         body: |
-          ## AMMF3-Core Release ${{ github.ref_name }}
+          ## AuroraCore Release ${{ github.ref_name }}
           
           ### 📦 Available Packages
-          - `ammf3-core-${{ github.ref_name }}-arm64-v8a.tar.gz` - ARM64 Android binaries
-          - `ammf3-core-${{ github.ref_name }}-x86_64.tar.gz` - x86_64 Android binaries
-          - `ammf3-core-${{ github.ref_name }}-all-architectures.tar.gz` - Combined package
+          - `AuroraCore-${{ github.ref_name }}-arm64-v8a.tar.gz` - ARM64 Android binaries
+          - `AuroraCore-${{ github.ref_name }}-x86_64.tar.gz` - x86_64 Android binaries
+          - `AuroraCore-${{ github.ref_name }}-all-architectures.tar.gz` - Combined package
           - `checksums.sha256` - SHA256 checksums for verification
           
           ### 🔧 Build Information

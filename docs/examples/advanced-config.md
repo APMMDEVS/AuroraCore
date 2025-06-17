@@ -1,6 +1,6 @@
 # Advanced Configuration Examples
 
-This guide demonstrates advanced configuration scenarios and integration patterns for AMMF3-Core, including complex logging setups, sophisticated file monitoring, and performance optimization techniques.
+This guide demonstrates advanced configuration scenarios and integration patterns for AuroraCore, including complex logging setups, sophisticated file monitoring, and performance optimization techniques.
 
 ## Example 1: Multi-Component Logging System
 
@@ -247,8 +247,8 @@ int main() {
 ### Compilation
 
 ```bash
-g++ -std=c++20 -I/data/local/tmp/ammf3/include \
-    -L/data/local/tmp/ammf3/lib -lammf3_logger \
+g++ -std=c++20 -I/data/local/tmp/AuroraCore/include \
+    -L/data/local/tmp/AuroraCore/lib -lAuroraCore_logger \
     advanced_logger_system.cpp -o advanced_logger_system
 ```
 
@@ -631,8 +631,8 @@ int main() {
 ### Compilation
 
 ```bash
-g++ -std=c++20 -I/data/local/tmp/ammf3/include \
-    -L/data/local/tmp/ammf3/lib -lammf3_logger -lammf3_filewatcher \
+g++ -std=c++20 -I/data/local/tmp/AuroraCore/include \
+    -L/data/local/tmp/AuroraCore/lib -lAuroraCore_logger -lAuroraCore_filewatcher \
     config_monitor.cpp -o config_monitor
 ```
 
@@ -937,8 +937,8 @@ int main() {
 ### Compilation
 
 ```bash
-g++ -std=c++20 -I/data/local/tmp/ammf3/include \
-    -L/data/local/tmp/ammf3/lib -lammf3_logger -lammf3_filewatcher \
+g++ -std=c++20 -I/data/local/tmp/AuroraCore/include \
+    -L/data/local/tmp/AuroraCore/lib -lAuroraCore_logger -lAuroraCore_filewatcher \
     log_aggregator.cpp -o log_aggregator
 ```
 
@@ -983,4 +983,4 @@ watcher.add_watch(path, callback, IN_MODIFY | IN_CREATE);
 // watcher.add_watch(path, callback, IN_ACCESS); // Avoid this
 ```
 
-These advanced examples demonstrate sophisticated usage patterns and optimization techniques for AMMF3-Core, enabling robust, high-performance logging and monitoring solutions in Android environments.
+These advanced examples demonstrate sophisticated usage patterns and optimization techniques for AuroraCore, enabling robust, high-performance logging and monitoring solutions in Android environments.

@@ -1,15 +1,15 @@
-# AMMF3-Core 介绍
+# AuroraCore 介绍
 
-欢迎使用 AMMF3-Core（Advanced Multi-Modal Framework 3 Core），这是一个专为 Android 环境设计的高性能、生产就绪的日志记录和文件监控框架。
+欢迎使用 AuroraCore（Advanced Multi-Modal Framework 3 Core），这是一个专为 Android 环境设计的高性能、生产就绪的日志记录和文件监控框架。
 
-## 🎯 什么是 AMMF3-Core？
+## 🎯 什么是 AuroraCore？
 
-AMMF3-Core 是一个全面的 C++ 框架，为 Android 应用程序提供两个核心组件：
+AuroraCore 是一个全面的 C++ 框架，为 Android 应用程序提供两个核心组件：
 
 1. **高性能日志器** - 支持守护进程模式的强大日志系统
 2. **实时文件监视器** - 高效的文件系统监控解决方案
 
-以性能和可靠性为设计理念，AMMF3-Core 旨在处理现代 Android 应用程序的严苛要求，同时保持最小的资源开销。
+以性能和可靠性为设计理念，AuroraCore 旨在处理现代 Android 应用程序的严苛要求，同时保持最小的资源开销。
 
 ## 🌟 主要特性
 
@@ -65,7 +65,7 @@ AMMF3-Core 是一个全面的 C++ 框架，为 Android 应用程序提供两个�
 ┌─────────────────────────────────────────────────────────────┐
 │                      应用程序层                             │
 ├─────────────────────────────────────────────────────────────┤
-│                    AMMF3-Core APIs                         │
+│                    AuroraCore APIs                         │
 ├─────────────────┬───────────────────────┬───────────────────┤
 │   Logger API    │    FileWatcher API    │    CLI 工具       │
 ├─────────────────┼───────────────────────┼───────────────────┤
@@ -110,7 +110,7 @@ AMMF3-Core 是一个全面的 C++ 框架，为 Android 应用程序提供两个�
 - **原生库**: C++ 库集成
 - **跨平台开发**: 跨平台的一致日志记录
 
-## 🚀 为什么选择 AMMF3-Core？
+## 🚀 为什么选择 AuroraCore？
 
 ### 性能优势
 
@@ -159,7 +159,7 @@ AMMF3-Core 是一个全面的 C++ 框架，为 Android 应用程序提供两个�
 ### 入门
 
 1. **设置环境**: 安装 Android NDK 和构建工具
-2. **克隆仓库**: 获取 AMMF3-Core 源代码
+2. **克隆仓库**: 获取 AuroraCore 源代码
 3. **构建框架**: 为目标架构编译
 4. **集成**: 添加到您的 Android 项目
 5. **配置**: 设置日志记录和监控
@@ -167,17 +167,17 @@ AMMF3-Core 是一个全面的 C++ 框架，为 Android 应用程序提供两个�
 ### 开发周期
 
 1. **设计**: 规划您的日志记录和监控策略
-2. **实现**: 集成 AMMF3-Core API
+2. **实现**: 集成 AuroraCore API
 3. **测试**: 验证功能和性能
 4. **优化**: 为您的用例微调配置
 5. **部署**: 部署到生产环境并进行监控
 
 ## 🔗 下一步
 
-准备开始使用 AMMF3-Core？以下是接下来要做的：
+准备开始使用 AuroraCore？以下是接下来要做的：
 
 1. **[入门指南](/zh/guide/getting-started)** - 设置您的开发环境
-2. **[从源码构建](/zh/guide/building)** - 为您的平台编译 AMMF3-Core
+2. **[从源码构建](/zh/guide/building)** - 为您的平台编译 AuroraCore
 3. **[API 参考](/zh/api/)** - 探索完整的 API 文档
 4. **[示例](/zh/examples/basic-usage)** - 查看实际使用示例
 5. **[性能指南](/zh/guide/performance)** - 为您的特定需求进行优化
@@ -191,4 +191,4 @@ AMMF3-Core 是一个全面的 C++ 框架，为 Android 应用程序提供两个�
 
 ---
 
-**准备使用 AMMF3-Core 构建高性能 Android 应用程序？** 从我们的[入门指南](/zh/guide/getting-started)开始，加入构建强大、高效 Android 解决方案的开发者社区。
+**准备使用 AuroraCore 构建高性能 Android 应用程序？** 从我们的[入门指南](/zh/guide/getting-started)开始，加入构建强大、高效 Android 解决方案的开发者社区。

@@ -1,19 +1,19 @@
 # Frequently Asked Questions (FAQ)
 
-Common questions and solutions for AMMF3-Core usage in Android root environments.
+Common questions and solutions for AuroraCore usage in Android root environments.
 
 ## 🔧 Installation & Setup
 
 ### Q: What are the minimum system requirements?
 
-**A:** AMMF3-Core requires:
+**A:** AuroraCore requires:
 - Android NDK r21 or higher
 - CMake 3.10 or higher
 - Linux kernel 2.6.13+ (for inotify support)
 - Root privileges for system-level operations
 - ARM64 or ARMv7 architecture
 
-### Q: How do I verify that AMMF3-Core is working correctly?
+### Q: How do I verify that AuroraCore is working correctly?
 
 **A:** Run the test programs after building:
 
@@ -30,7 +30,7 @@ Common questions and solutions for AMMF3-Core usage in Android root environments
 cat /tmp/test.log
 ```
 
-### Q: Can I use AMMF3-Core without root privileges?
+### Q: Can I use AuroraCore without root privileges?
 
 **A:** Limited functionality is available without root:
 - Logger API works in user directories (e.g., `/data/local/tmp/`)
@@ -164,13 +164,13 @@ watcher.add_watch("/data/config", callback, mask);
 
 ## 🔗 Integration Issues
 
-### Q: How do I integrate AMMF3-Core with my existing Android app?
+### Q: How do I integrate AuroraCore with my existing Android app?
 
 **A:** Use the API headers in your CMakeLists.txt:
 
 ```cmake
-# Add AMMF3-Core to your project
-add_subdirectory(path/to/AMMF3-Core)
+# Add AuroraCore to your project
+add_subdirectory(path/to/AuroraCore)
 
 # Link against the libraries
 target_link_libraries(your_app
@@ -180,14 +180,14 @@ target_link_libraries(your_app
 
 # Include headers
 target_include_directories(your_app PRIVATE
-    path/to/AMMF3-Core/src/loggerAPI
-    path/to/AMMF3-Core/src/filewatcherAPI
+    path/to/AuroraCore/src/loggerAPI
+    path/to/AuroraCore/src/filewatcherAPI
 )
 ```
 
-### Q: Can I use AMMF3-Core with other logging frameworks?
+### Q: Can I use AuroraCore with other logging frameworks?
 
-**A:** Yes, AMMF3-Core can complement existing frameworks:
+**A:** Yes, AuroraCore can complement existing frameworks:
 
 ```cpp
 // Use as a high-performance backend
@@ -197,7 +197,7 @@ public:
         // Your existing logic
         existing_logger->log(message);
         
-        // Also log to AMMF3-Core for system monitoring
+        // Also log to AuroraCore for system monitoring
         LoggerAPI::info(message);
     }
 };
@@ -205,7 +205,7 @@ public:
 
 ### Q: Thread safety concerns
 
-**A:** AMMF3-Core is thread-safe:
+**A:** AuroraCore is thread-safe:
 
 ```cpp
 // Safe to call from multiple threads
@@ -233,7 +233,7 @@ t2.join();
 | Optimized | ~25,000 msg/sec | Large buffers, delayed flush |
 | High-throughput | ~50,000 msg/sec | Memory-intensive |
 
-### Q: How much memory does AMMF3-Core use?
+### Q: How much memory does AuroraCore use?
 
 **A:** Memory usage varies by configuration:
 
@@ -243,7 +243,7 @@ t2.join();
 
 ### Q: Battery impact on Android devices?
 
-**A:** AMMF3-Core is designed for efficiency:
+**A:** AuroraCore is designed for efficiency:
 
 - **Logger**: Minimal impact with proper buffering
 - **FileWatcher**: Low CPU usage with inotify
@@ -294,7 +294,7 @@ valgrind --tool=memcheck --leak-check=full ./logger_daemon -f /tmp/test.log
 
 ## 📱 Android-Specific Questions
 
-### Q: Does AMMF3-Core work on all Android versions?
+### Q: Does AuroraCore work on all Android versions?
 
 **A:** Compatibility:
 
@@ -393,8 +393,8 @@ If you can't find the answer here:
 
 1. **Check the documentation**: [API Reference](/api/)
 2. **Review examples**: [Basic Usage](/examples/basic-usage)
-3. **Search issues**: [GitHub Issues](https://github.com/your-username/AMMF3-Core/issues)
-4. **Ask questions**: [GitHub Discussions](https://github.com/your-username/AMMF3-Core/discussions)
+3. **Search issues**: [GitHub Issues](https://github.com/your-username/AuroraCore/issues)
+4. **Ask questions**: [GitHub Discussions](https://github.com/your-username/AuroraCore/discussions)
 
 ## 🔗 Related Documentation
 

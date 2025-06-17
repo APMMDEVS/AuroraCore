@@ -1,6 +1,6 @@
 # Installation Guide
 
-This comprehensive guide will walk you through installing AMMF3-Core on your Android root environment, covering different installation methods and configuration options.
+This comprehensive guide will walk you through installing AuroraCore on your Android root environment, covering different installation methods and configuration options.
 
 ## System Requirements
 
@@ -32,41 +32,41 @@ This comprehensive guide will walk you through installing AMMF3-Core on your And
 
 ```bash
 # Download the latest release
-wget https://github.com/Aurora-Nasa-1/AMMF3-Core/releases/latest/download/ammf3-core-arm64.tar.gz
+wget https://github.com/Aurora-Nasa-1/AuroraCore/releases/latest/download/AuroraCore-arm64.tar.gz
 
 # Extract the archive
-tar -xzf ammf3-core-arm64.tar.gz
-cd ammf3-core-arm64
+tar -xzf AuroraCore-arm64.tar.gz
+cd AuroraCore-arm64
 ```
 
 #### Install System-wide
 
 ```bash
 # Copy binaries to system directories
-adb push lib/libammf3_logger.so /system/lib64/
-adb push lib/libammf3_filewatcher.so /system/lib64/
-adb push bin/ammf3_daemon /system/bin/
-adb push include/* /system/include/ammf3/
+adb push lib/libAuroraCore_logger.so /system/lib64/
+adb push lib/libAuroraCore_filewatcher.so /system/lib64/
+adb push bin/AuroraCore_daemon /system/bin/
+adb push include/* /system/include/AuroraCore/
 
 # Set proper permissions
-adb shell chmod 755 /system/bin/ammf3_daemon
-adb shell chmod 644 /system/lib64/libammf3_*.so
+adb shell chmod 755 /system/bin/AuroraCore_daemon
+adb shell chmod 644 /system/lib64/libAuroraCore_*.so
 ```
 
 #### Install to Local Directory
 
 ```bash
 # Create local installation directory
-adb shell mkdir -p /data/local/tmp/ammf3
+adb shell mkdir -p /data/local/tmp/AuroraCore
 
 # Copy files
-adb push lib/* /data/local/tmp/ammf3/lib/
-adb push bin/* /data/local/tmp/ammf3/bin/
-adb push include/* /data/local/tmp/ammf3/include/
+adb push lib/* /data/local/tmp/AuroraCore/lib/
+adb push bin/* /data/local/tmp/AuroraCore/bin/
+adb push include/* /data/local/tmp/AuroraCore/include/
 
 # Set permissions
-adb shell chmod -R 755 /data/local/tmp/ammf3/bin/
-adb shell chmod -R 644 /data/local/tmp/ammf3/lib/
+adb shell chmod -R 755 /data/local/tmp/AuroraCore/bin/
+adb shell chmod -R 644 /data/local/tmp/AuroraCore/lib/
 ```
 
 ### Method 2: Building from Source
@@ -74,8 +74,8 @@ adb shell chmod -R 644 /data/local/tmp/ammf3/lib/
 #### Clone Repository
 
 ```bash
-git clone https://github.com/Aurora-Nasa-1/AMMF3-Core.git
-cd AMMF3-Core
+git clone https://github.com/Aurora-Nasa-1/AuroraCore.git
+cd AuroraCore
 git submodule update --init --recursive
 ```
 
@@ -121,7 +121,7 @@ ls -la examples/
 
 ```bash
 # Install to device
-cmake --install . --prefix /data/local/tmp/ammf3
+cmake --install . --prefix /data/local/tmp/AuroraCore
 
 # Or create distribution package
 cpack -G TGZ
@@ -132,25 +132,25 @@ cpack -G TGZ
 #### Using Termux (if available)
 
 ```bash
-# Add AMMF3 repository
+# Add AuroraCore repository
 echo "deb https://aurora-nasa-1.github.io/termux-packages/ termux main" >> $PREFIX/etc/apt/sources.list
 
 # Update package list
 apt update
 
-# Install AMMF3-Core
-apt install ammf3-core
+# Install AuroraCore
+apt install AuroraCore
 ```
 
 #### Using Custom Package Manager
 
 ```bash
 # Download package manager
-wget https://github.com/Aurora-Nasa-1/AMMF3-Core/releases/latest/download/ammf3-installer.sh
-chmod +x ammf3-installer.sh
+wget https://github.com/Aurora-Nasa-1/AuroraCore/releases/latest/download/AuroraCore-installer.sh
+chmod +x AuroraCore-installer.sh
 
 # Run installer
-./ammf3-installer.sh --install --prefix=/data/local/tmp/ammf3
+./AuroraCore-installer.sh --install --prefix=/data/local/tmp/AuroraCore
 ```
 
 ## Configuration
@@ -161,8 +161,8 @@ chmod +x ammf3-installer.sh
 
 ```bash
 # Add to shell profile (.bashrc, .zshrc, etc.)
-export LD_LIBRARY_PATH=/data/local/tmp/ammf3/lib:$LD_LIBRARY_PATH
-export PATH=/data/local/tmp/ammf3/bin:$PATH
+export LD_LIBRARY_PATH=/data/local/tmp/AuroraCore/lib:$LD_LIBRARY_PATH
+export PATH=/data/local/tmp/AuroraCore/bin:$PATH
 
 # For system-wide installation
 export LD_LIBRARY_PATH=/system/lib64:$LD_LIBRARY_PATH
@@ -173,10 +173,10 @@ export PATH=/system/bin:$PATH
 
 ```bash
 # Create config directory
-mkdir -p /data/local/tmp/ammf3/config
+mkdir -p /data/local/tmp/AuroraCore/config
 
 # Set permissions
-chmod 755 /data/local/tmp/ammf3/config
+chmod 755 /data/local/tmp/AuroraCore/config
 ```
 
 ### Logger Configuration
@@ -184,8 +184,8 @@ chmod 755 /data/local/tmp/ammf3/config
 #### Create Logger Config File
 
 ```bash
-cat > /data/local/tmp/ammf3/config/logger.conf << 'EOF'
-# AMMF3 Logger Configuration
+cat > /data/local/tmp/AuroraCore/config/logger.conf << 'EOF'
+# AuroraCore Logger Configuration
 
 [General]
 log_level = INFO
@@ -206,7 +206,7 @@ memory_mapped_io = true
 
 [Daemon]
 enable_daemon = false
-socket_path = "/data/local/tmp/ammf3/logger.sock"
+socket_path = "/data/local/tmp/AuroraCore/logger.sock"
 max_clients = 10
 EOF
 ```
@@ -228,8 +228,8 @@ chmod 644 /data/local/tmp/logs/app.log
 #### Create FileWatcher Config File
 
 ```bash
-cat > /data/local/tmp/ammf3/config/filewatcher.conf << 'EOF'
-# AMMF3 FileWatcher Configuration
+cat > /data/local/tmp/AuroraCore/config/filewatcher.conf << 'EOF'
+# AuroraCore FileWatcher Configuration
 
 [General]
 event_buffer_size = 4096
@@ -265,40 +265,40 @@ EOF
 getenforce
 
 # Check file contexts
-ls -Z /data/local/tmp/ammf3/
+ls -Z /data/local/tmp/AuroraCore/
 ```
 
 #### Set SELinux Contexts
 
 ```bash
 # Set appropriate contexts for binaries
-chcon u:object_r:system_file:s0 /data/local/tmp/ammf3/bin/*
-chcon u:object_r:system_lib_file:s0 /data/local/tmp/ammf3/lib/*
+chcon u:object_r:system_file:s0 /data/local/tmp/AuroraCore/bin/*
+chcon u:object_r:system_lib_file:s0 /data/local/tmp/AuroraCore/lib/*
 
 # Set contexts for config files
-chcon u:object_r:system_data_file:s0 /data/local/tmp/ammf3/config/*
+chcon u:object_r:system_data_file:s0 /data/local/tmp/AuroraCore/config/*
 ```
 
 #### Create SELinux Policy (if needed)
 
 ```bash
 # Create custom policy file
-cat > ammf3.te << 'EOF'
-policy_module(ammf3, 1.0)
+cat > AuroraCore.te << 'EOF'
+policy_module(AuroraCore, 1.0)
 
-type ammf3_exec_t;
-type ammf3_lib_t;
-type ammf3_data_t;
+type AuroraCore_exec_t;
+type AuroraCore_lib_t;
+type AuroraCore_data_t;
 
-allow untrusted_app ammf3_exec_t:file execute;
-allow untrusted_app ammf3_lib_t:file { read open };
-allow untrusted_app ammf3_data_t:file { read write create };
+allow untrusted_app AuroraCore_exec_t:file execute;
+allow untrusted_app AuroraCore_lib_t:file { read open };
+allow untrusted_app AuroraCore_data_t:file { read write create };
 EOF
 
 # Compile and load policy
-checkmodule -M -m -o ammf3.mod ammf3.te
-semodule_package -o ammf3.pp -m ammf3.mod
-semodule -i ammf3.pp
+checkmodule -M -m -o AuroraCore.mod AuroraCore.te
+semodule_package -o AuroraCore.pp -m AuroraCore.mod
+semodule -i AuroraCore.pp
 ```
 
 ## Verification
@@ -308,7 +308,7 @@ semodule -i ammf3.pp
 ```bash
 # Test logger API
 cat > test_logger.cpp << 'EOF'
-#include <ammf3/logger_api.hpp>
+#include <AuroraCore/logger_api.hpp>
 #include <iostream>
 
 int main() {
@@ -329,8 +329,8 @@ int main() {
 EOF
 
 # Compile and run test
-g++ -std=c++20 -I/data/local/tmp/ammf3/include \
-    -L/data/local/tmp/ammf3/lib -lammf3_logger \
+g++ -std=c++20 -I/data/local/tmp/AuroraCore/include \
+    -L/data/local/tmp/AuroraCore/lib -lAuroraCore_logger \
     test_logger.cpp -o test_logger
 
 ./test_logger
@@ -341,7 +341,7 @@ g++ -std=c++20 -I/data/local/tmp/ammf3/include \
 ```bash
 # Test FileWatcher API
 cat > test_filewatcher.cpp << 'EOF'
-#include <ammf3/filewatcher_api.hpp>
+#include <AuroraCore/filewatcher_api.hpp>
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -382,8 +382,8 @@ int main() {
 EOF
 
 # Compile and run test
-g++ -std=c++20 -I/data/local/tmp/ammf3/include \
-    -L/data/local/tmp/ammf3/lib -lammf3_filewatcher \
+g++ -std=c++20 -I/data/local/tmp/AuroraCore/include \
+    -L/data/local/tmp/AuroraCore/lib -lAuroraCore_filewatcher \
     test_filewatcher.cpp -o test_filewatcher
 
 ./test_filewatcher
@@ -393,14 +393,14 @@ g++ -std=c++20 -I/data/local/tmp/ammf3/include \
 
 ```bash
 # Run comprehensive test suite
-/data/local/tmp/ammf3/bin/ammf3_test --all
+/data/local/tmp/AuroraCore/bin/AuroraCore_test --all
 
 # Check system resources
-ps aux | grep ammf3
-lsof | grep ammf3
+ps aux | grep AuroraCore
+lsof | grep AuroraCore
 
 # Verify file permissions
-ls -la /data/local/tmp/ammf3/
+ls -la /data/local/tmp/AuroraCore/
 ls -la /data/local/tmp/logs/
 ```
 
@@ -412,11 +412,11 @@ ls -la /data/local/tmp/logs/
 
 ```bash
 # Check file permissions
-ls -la /data/local/tmp/ammf3/
+ls -la /data/local/tmp/AuroraCore/
 
 # Fix permissions
-chmod -R 755 /data/local/tmp/ammf3/bin/
-chmod -R 644 /data/local/tmp/ammf3/lib/
+chmod -R 755 /data/local/tmp/AuroraCore/bin/
+chmod -R 644 /data/local/tmp/AuroraCore/lib/
 ```
 
 #### Library Not Found Errors
@@ -426,10 +426,10 @@ chmod -R 644 /data/local/tmp/ammf3/lib/
 echo $LD_LIBRARY_PATH
 
 # Add library path
-export LD_LIBRARY_PATH=/data/local/tmp/ammf3/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/data/local/tmp/AuroraCore/lib:$LD_LIBRARY_PATH
 
 # Verify libraries
-ldd /data/local/tmp/ammf3/bin/ammf3_daemon
+ldd /data/local/tmp/AuroraCore/bin/AuroraCore_daemon
 ```
 
 #### SELinux Denials
@@ -461,26 +461,26 @@ echo 128 > /proc/sys/fs/inotify/max_user_instances
 
 ```bash
 # Check installation logs
-tail -f /data/local/tmp/logs/ammf3_install.log
+tail -f /data/local/tmp/logs/AuroraCore_install.log
 
 # Check runtime logs
 tail -f /data/local/tmp/logs/app.log
 
 # Check system logs
-logcat | grep ammf3
+logcat | grep AuroraCore
 ```
 
 ### Performance Verification
 
 ```bash
 # Run performance benchmarks
-/data/local/tmp/ammf3/bin/ammf3_benchmark --logger --filewatcher
+/data/local/tmp/AuroraCore/bin/AuroraCore_benchmark --logger --filewatcher
 
 # Monitor resource usage
-top -p $(pgrep ammf3)
+top -p $(pgrep AuroraCore)
 
 # Check memory usage
-cat /proc/$(pgrep ammf3)/status | grep -E "VmSize|VmRSS"
+cat /proc/$(pgrep AuroraCore)/status | grep -E "VmSize|VmRSS"
 ```
 
 ## Uninstallation
@@ -489,19 +489,19 @@ cat /proc/$(pgrep ammf3)/status | grep -E "VmSize|VmRSS"
 
 ```bash
 # Remove local installation
-rm -rf /data/local/tmp/ammf3/
+rm -rf /data/local/tmp/AuroraCore/
 
 # Remove system installation
-rm -f /system/lib64/libammf3_*.so
-rm -f /system/bin/ammf3_daemon
-rm -rf /system/include/ammf3/
+rm -f /system/lib64/libAuroraCore_*.so
+rm -f /system/bin/AuroraCore_daemon
+rm -rf /system/include/AuroraCore/
 ```
 
 ### Clean Configuration
 
 ```bash
 # Remove configuration files
-rm -rf /data/local/tmp/ammf3/config/
+rm -rf /data/local/tmp/AuroraCore/config/
 
 # Remove log files (optional)
 rm -rf /data/local/tmp/logs/
@@ -515,7 +515,7 @@ unset LD_LIBRARY_PATH
 unset PATH
 
 # Remove from shell profile
-sed -i '/ammf3/d' ~/.bashrc
+sed -i '/AuroraCore/d' ~/.bashrc
 ```
 
-This installation guide provides comprehensive coverage of different installation methods and configurations, ensuring AMMF3-Core can be successfully deployed in various Android root environments.
+This installation guide provides comprehensive coverage of different installation methods and configurations, ensuring AuroraCore can be successfully deployed in various Android root environments.

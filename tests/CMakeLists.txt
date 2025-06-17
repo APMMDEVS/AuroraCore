@@ -1,4 +1,4 @@
-# Tests for AMMF3-Core
+# Tests for AuroraCore
 
 # Simple test executables
 add_executable(test_logger_api

@@ -1,6 +1,6 @@
 # 快速开始
 
-本指南将帮助您快速在Android root环境中开始使用AMMF3-Core。
+本指南将帮助您快速在Android root环境中开始使用AuroraCore。
 
 ## 前置要求
 
@@ -18,8 +18,8 @@
 ### 1. 克隆仓库
 
 ```bash
-git clone https://github.com/Aurora-Nasa-1/AMMF3-Core.git
-cd AMMF3-Core
+git clone https://github.com/Aurora-Nasa-1/AuroraCore.git
+cd AuroraCore
 ```
 
 ### 2. 设置Android NDK
@@ -76,7 +76,7 @@ adb shell chmod +x /data/local/tmp/filewatcher
    # 在另一个终端中
    adb shell
    cd /data/local/tmp
-   ./logger_client "来自AMMF3-Core的问候！"
+   ./logger_client "来自AuroraCore的问候！"
    ./logger_client "这是一条测试消息"
    ```
 
@@ -223,25 +223,25 @@ project(MyApp)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# 添加AMMF3-Core作为子目录或find_package
-add_subdirectory(path/to/AMMF3-Core)
+# 添加AuroraCore作为子目录或find_package
+add_subdirectory(path/to/AuroraCore)
 
 # 创建您的可执行文件
 add_executable(my_app my_app.cpp)
 add_executable(file_monitor file_monitor.cpp)
 
-# 链接AMMF3-Core API
+# 链接AuroraCore API
 target_link_libraries(my_app PRIVATE loggerAPI)
 target_link_libraries(file_monitor PRIVATE loggerAPI filewatcherAPI)
 
 # 包含目录
-target_include_directories(my_app PRIVATE path/to/AMMF3-Core/src)
-target_include_directories(file_monitor PRIVATE path/to/AMMF3-Core/src)
+target_include_directories(my_app PRIVATE path/to/AuroraCore/src)
+target_include_directories(file_monitor PRIVATE path/to/AuroraCore/src)
 ```
 
 ## 下一步
 
-现在您已经让AMMF3-Core运行起来了：
+现在您已经让AuroraCore运行起来了：
 
 1. **探索高级功能**: 查看[API参考](/zh/api/logger-api)获取详细文档
 2. **性能调优**: 阅读我们的[性能指南](/zh/guide/performance)获取优化技巧

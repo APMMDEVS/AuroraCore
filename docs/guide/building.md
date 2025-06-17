@@ -1,6 +1,6 @@
 # Building from Source
 
-Complete guide for building AMMF3-Core from source code on different platforms and configurations.
+Complete guide for building AuroraCore from source code on different platforms and configurations.
 
 ## 📋 Prerequisites
 
@@ -23,8 +23,8 @@ Complete guide for building AMMF3-Core from source code on different platforms a
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/your-username/AMMF3-Core.git
-cd AMMF3-Core
+git clone https://github.com/your-username/AuroraCore.git
+cd AuroraCore
 ```
 
 ### 2. Setup Android NDK
@@ -320,7 +320,7 @@ cpack -G ZIP
 sudo make install
 
 # Install to custom location
-cmake .. -DCMAKE_INSTALL_PREFIX=/opt/ammf3-core
+cmake .. -DCMAKE_INSTALL_PREFIX=/opt/AuroraCore
 make install
 ```
 
@@ -429,7 +429,7 @@ If you encounter build issues:
 
 1. Check this guide for common solutions
 2. Review [FAQ](/guide/faq) for troubleshooting
-3. Search [GitHub Issues](https://github.com/your-username/AMMF3-Core/issues)
+3. Search [GitHub Issues](https://github.com/your-username/AuroraCore/issues)
 4. Create a new issue with:
    - Build environment details
    - Complete error messages

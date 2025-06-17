@@ -1,6 +1,6 @@
 # API Reference
 
-Comprehensive API documentation for AMMF3-Core components.
+Comprehensive API documentation for AuroraCore components.
 
 ## 📚 Available APIs
 
@@ -29,7 +29,7 @@ Comprehensive API documentation for AMMF3-Core components.
 ### Basic Logger Usage
 
 ```cpp
-#include "ammf3/logger_api.hpp"
+#include "AuroraCore/logger_api.hpp"
 
 // Initialize logger
 LoggerConfig config;
@@ -46,7 +46,7 @@ logger.error("Error occurred: {}", error_message);
 ### Basic FileWatcher Usage
 
 ```cpp
-#include "ammf3/filewatcher_api.hpp"
+#include "AuroraCore/filewatcher_api.hpp"
 
 // Setup file watcher
 FileWatcherConfig config;
@@ -147,4 +147,4 @@ For API-specific questions:
 - Check the detailed API documentation for each component
 - Review the [FAQ](/guide/faq) for common issues
 - Browse [examples](/examples/basic-usage) for usage patterns
-- Submit issues on [GitHub](https://github.com/your-username/AMMF3-Core/issues)
+- Submit issues on [GitHub](https://github.com/your-username/AuroraCore/issues)

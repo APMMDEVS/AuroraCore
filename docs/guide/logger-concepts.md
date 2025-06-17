@@ -1,6 +1,6 @@
 # Logger System Core Concepts
 
-The AMMF3-Core Logger is a high-performance, multi-threaded logging system designed for Android root environments. This guide explains the core concepts and architecture behind the logger component.
+The AuroraCore Logger is a high-performance, multi-threaded logging system designed for Android root environments. This guide explains the core concepts and architecture behind the logger component.
 
 ## Architecture Overview
 

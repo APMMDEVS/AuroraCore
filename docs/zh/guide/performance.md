@@ -1,6 +1,6 @@
 # 性能优化
 
-优化 AMMF3-Core 组件性能的综合指南，包括 Logger 和 FileWatcher 的最佳实践。
+优化 AuroraCore 组件性能的综合指南，包括 Logger 和 FileWatcher 的最佳实践。
 
 ## 🚀 Logger 性能优化
 
@@ -220,7 +220,7 @@ set_thread_affinity(logger_thread, 2);  // 使用 CPU 2
 echo deadline | sudo tee /sys/block/sda/queue/scheduler
 
 # 调整 I/O 优先级
-ionice -c 1 -n 4 ./ammf3_logger_daemon
+ionice -c 1 -n 4 ./AuroraCore_logger_daemon
 ```
 
 ### 内存管理
@@ -300,10 +300,10 @@ std::cout << "队列深度: " << fw_stats.queue_depth << std::endl;
 
 ```bash
 # 监控 CPU 使用率
-top -p $(pgrep ammf3)
+top -p $(pgrep AuroraCore)
 
 # 监控内存使用
-ps -o pid,vsz,rss,comm -p $(pgrep ammf3)
+ps -o pid,vsz,rss,comm -p $(pgrep AuroraCore)
 
 # 监控 I/O 统计
 iostat -x 1
@@ -316,15 +316,15 @@ find /proc/*/fd -lname anon_inode:inotify 2>/dev/null | wc -l
 
 ```bash
 # 使用 perf 进行性能分析
-perf record -g ./ammf3_app
+perf record -g ./AuroraCore_app
 perf report
 
 # 使用 valgrind 检查内存性能
-valgrind --tool=callgrind ./ammf3_app
+valgrind --tool=callgrind ./AuroraCore_app
 kcachegrind callgrind.out.*
 
 # 使用 strace 分析系统调用
-strace -c -p $(pgrep ammf3)
+strace -c -p $(pgrep AuroraCore)
 ```
 
 ## 🔧 故障排除

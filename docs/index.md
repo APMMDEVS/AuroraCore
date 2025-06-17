@@ -2,19 +2,19 @@
 layout: home
 
 hero:
-  name: "AMMF3-Core"
+  name: "AuroraCore"
   text: "Android Root Logger & File Watcher"
   tagline: High-performance logging and file monitoring solution designed specifically for Android root environment
   image:
     src: /logo.svg
-    alt: AMMF3-Core
+    alt: AuroraCore
   actions:
     - theme: brand
       text: Get Started
       link: /guide/getting-started
     - theme: alt
       text: View on GitHub
-      link: https://github.com/Aurora-Nasa-1/AMMF3-Core
+      link: https://github.com/Aurora-Nasa-1/AuroraCore
     - theme: alt
       text: 中文文档
       link: /zh/
@@ -100,7 +100,7 @@ int main() {
 }
 ```
 
-## Why AMMF3-Core?
+## Why AuroraCore?
 
 - **🎯 Purpose-Built**: Specifically designed for Android root environment constraints
 - **⚡ Performance**: Optimized for minimal CPU usage and power consumption
@@ -110,11 +110,11 @@ int main() {
 
 ## Getting Started
 
-Ready to integrate AMMF3-Core into your Android project? Check out our [Getting Started Guide](/guide/getting-started) or explore the [API Reference](/api/logger-api) for detailed documentation.
+Ready to integrate AuroraCore into your Android project? Check out our [Getting Started Guide](/guide/getting-started) or explore the [API Reference](/api/logger-api) for detailed documentation.
 
 ## Community & Support
 
 - 📖 [Documentation](/guide/introduction)
-- 🐛 [Issue Tracker](https://github.com/Aurora-Nasa-1/AMMF3-Core/issues)
-- 💬 [Discussions](https://github.com/Aurora-Nasa-1/AMMF3-Core/discussions)
+- 🐛 [Issue Tracker](https://github.com/Aurora-Nasa-1/AuroraCore/issues)
+- 💬 [Discussions](https://github.com/Aurora-Nasa-1/AuroraCore/discussions)
 - 📧 [Contact Us](mailto:support@Aurora-Nasa-1.com)

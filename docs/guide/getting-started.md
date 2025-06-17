@@ -1,6 +1,6 @@
 # Getting Started
 
-This guide will help you quickly get up and running with AMMF3-Core in your Android root environment.
+This guide will help you quickly get up and running with AuroraCore in your Android root environment.
 
 ## Prerequisites
 
@@ -18,8 +18,8 @@ Before you begin, ensure you have the following:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Aurora-Nasa-1/AMMF3-Core.git
-cd AMMF3-Core
+git clone https://github.com/Aurora-Nasa-1/AuroraCore.git
+cd AuroraCore
 ```
 
 ### 2. Set Up Android NDK
@@ -76,7 +76,7 @@ adb shell chmod +x /data/local/tmp/filewatcher
    # In another terminal
    adb shell
    cd /data/local/tmp
-   ./logger_client "Hello from AMMF3-Core!"
+   ./logger_client "Hello from AuroraCore!"
    ./logger_client "This is a test message"
    ```
 
@@ -223,25 +223,25 @@ project(MyApp)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Add AMMF3-Core as subdirectory or find_package
-add_subdirectory(path/to/AMMF3-Core)
+# Add AuroraCore as subdirectory or find_package
+add_subdirectory(path/to/AuroraCore)
 
 # Create your executable
 add_executable(my_app my_app.cpp)
 add_executable(file_monitor file_monitor.cpp)
 
-# Link against AMMF3-Core APIs
+# Link against AuroraCore APIs
 target_link_libraries(my_app PRIVATE loggerAPI)
 target_link_libraries(file_monitor PRIVATE loggerAPI filewatcherAPI)
 
 # Include directories
-target_include_directories(my_app PRIVATE path/to/AMMF3-Core/src)
-target_include_directories(file_monitor PRIVATE path/to/AMMF3-Core/src)
+target_include_directories(my_app PRIVATE path/to/AuroraCore/src)
+target_include_directories(file_monitor PRIVATE path/to/AuroraCore/src)
 ```
 
 ## Next Steps
 
-Now that you have AMMF3-Core up and running:
+Now that you have AuroraCore up and running:
 
 1. **Explore Advanced Features**: Check out the [API Reference](/api/logger-api) for detailed documentation
 2. **Performance Tuning**: Read our [Performance Guide](/guide/performance) for optimization tips

@@ -1,15 +1,15 @@
 # Integration Examples
 
-This guide demonstrates how to integrate AMMF3-Core with various systems, frameworks, and platforms commonly used in Android development and system administration.
+This guide demonstrates how to integrate AuroraCore with various systems, frameworks, and platforms commonly used in Android development and system administration.
 
 ## Example 1: Android NDK Integration
 
-Integrating AMMF3-Core into an Android NDK application with JNI bindings.
+Integrating AuroraCore into an Android NDK application with JNI bindings.
 
 ### JNI Wrapper Implementation
 
 ```cpp
-// ammf3_jni.cpp
+// AuroraCore_jni.cpp
 #include <jni.h>
 #include <android/log.h>
 #include "loggerAPI/logger_api.hpp"
@@ -43,7 +43,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_example_ammf3_Logger_initLogger(JNIEnv* env, jobject thiz,
+Java_com_example_AuroraCore_Logger_initLogger(JNIEnv* env, jobject thiz,
                                         jstring log_path,
                                         jlong max_file_size,
                                         jint max_files,
@@ -66,19 +66,19 @@ Java_com_example_ammf3_Logger_initLogger(JNIEnv* env, jobject thiz,
         
         env->ReleaseStringUTFChars(log_path, path_str);
         
-        __android_log_print(ANDROID_LOG_INFO, "AMMF3", "Logger initialized successfully");
+        __android_log_print(ANDROID_LOG_INFO, "AuroraCore", "Logger initialized successfully");
         return JNI_TRUE;
     } catch (const std::exception& e) {
-        __android_log_print(ANDROID_LOG_ERROR, "AMMF3", "Failed to initialize logger: %s", e.what());
+        __android_log_print(ANDROID_LOG_ERROR, "AuroraCore", "Failed to initialize logger: %s", e.what());
         return JNI_FALSE;
     }
 }
 
 JNIEXPORT void JNICALL
-Java_com_example_ammf3_Logger_log(JNIEnv* env, jobject thiz,
+Java_com_example_AuroraCore_Logger_log(JNIEnv* env, jobject thiz,
                                  jint level, jstring message) {
     if (!g_logger) {
-        __android_log_print(ANDROID_LOG_ERROR, "AMMF3", "Logger not initialized");
+        __android_log_print(ANDROID_LOG_ERROR, "AuroraCore", "Logger not initialized");
         return;
     }
     
@@ -87,36 +87,36 @@ Java_com_example_ammf3_Logger_log(JNIEnv* env, jobject thiz,
     try {
         g_logger->log(static_cast<LoggerAPI::LogLevel>(level), std::string(msg_str));
     } catch (const std::exception& e) {
-        __android_log_print(ANDROID_LOG_ERROR, "AMMF3", "Logging failed: %s", e.what());
+        __android_log_print(ANDROID_LOG_ERROR, "AuroraCore", "Logging failed: %s", e.what());
     }
     
     env->ReleaseStringUTFChars(message, msg_str);
 }
 
 JNIEXPORT void JNICALL
-Java_com_example_ammf3_Logger_destroyLogger(JNIEnv* env, jobject thiz) {
+Java_com_example_AuroraCore_Logger_destroyLogger(JNIEnv* env, jobject thiz) {
     g_logger.reset();
-    __android_log_print(ANDROID_LOG_INFO, "AMMF3", "Logger destroyed");
+    __android_log_print(ANDROID_LOG_INFO, "AuroraCore", "Logger destroyed");
 }
 
 // FileWatcher JNI functions
 JNIEXPORT jboolean JNICALL
-Java_com_example_ammf3_FileWatcher_initWatcher(JNIEnv* env, jobject thiz) {
+Java_com_example_AuroraCore_FileWatcher_initWatcher(JNIEnv* env, jobject thiz) {
     try {
         g_watcher = std::make_unique<FileWatcherAPI::FileWatcher>();
-        __android_log_print(ANDROID_LOG_INFO, "AMMF3", "FileWatcher initialized successfully");
+        __android_log_print(ANDROID_LOG_INFO, "AuroraCore", "FileWatcher initialized successfully");
         return JNI_TRUE;
     } catch (const std::exception& e) {
-        __android_log_print(ANDROID_LOG_ERROR, "AMMF3", "Failed to initialize FileWatcher: %s", e.what());
+        __android_log_print(ANDROID_LOG_ERROR, "AuroraCore", "Failed to initialize FileWatcher: %s", e.what());
         return JNI_FALSE;
     }
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_example_ammf3_FileWatcher_addWatch(JNIEnv* env, jobject thiz,
+Java_com_example_AuroraCore_FileWatcher_addWatch(JNIEnv* env, jobject thiz,
                                           jstring path, jobject callback) {
     if (!g_watcher) {
-        __android_log_print(ANDROID_LOG_ERROR, "AMMF3", "FileWatcher not initialized");
+        __android_log_print(ANDROID_LOG_ERROR, "AuroraCore", "FileWatcher not initialized");
         return JNI_FALSE;
     }
     
@@ -174,23 +174,23 @@ Java_com_example_ammf3_FileWatcher_addWatch(JNIEnv* env, jobject thiz,
 }
 
 JNIEXPORT void JNICALL
-Java_com_example_ammf3_FileWatcher_start(JNIEnv* env, jobject thiz) {
+Java_com_example_AuroraCore_FileWatcher_start(JNIEnv* env, jobject thiz) {
     if (g_watcher) {
         g_watcher->start();
-        __android_log_print(ANDROID_LOG_INFO, "AMMF3", "FileWatcher started");
+        __android_log_print(ANDROID_LOG_INFO, "AuroraCore", "FileWatcher started");
     }
 }
 
 JNIEXPORT void JNICALL
-Java_com_example_ammf3_FileWatcher_stop(JNIEnv* env, jobject thiz) {
+Java_com_example_AuroraCore_FileWatcher_stop(JNIEnv* env, jobject thiz) {
     if (g_watcher) {
         g_watcher->stop();
-        __android_log_print(ANDROID_LOG_INFO, "AMMF3", "FileWatcher stopped");
+        __android_log_print(ANDROID_LOG_INFO, "AuroraCore", "FileWatcher stopped");
     }
 }
 
 JNIEXPORT void JNICALL
-Java_com_example_ammf3_FileWatcher_destroyWatcher(JNIEnv* env, jobject thiz) {
+Java_com_example_AuroraCore_FileWatcher_destroyWatcher(JNIEnv* env, jobject thiz) {
     // Clean up all callback references
     {
         std::lock_guard<std::mutex> lock(g_callbacks_mutex);
@@ -201,7 +201,7 @@ Java_com_example_ammf3_FileWatcher_destroyWatcher(JNIEnv* env, jobject thiz) {
     }
     
     g_watcher.reset();
-    __android_log_print(ANDROID_LOG_INFO, "AMMF3", "FileWatcher destroyed");
+    __android_log_print(ANDROID_LOG_INFO, "AuroraCore", "FileWatcher destroyed");
 }
 
 } // extern "C"
@@ -211,7 +211,7 @@ Java_com_example_ammf3_FileWatcher_destroyWatcher(JNIEnv* env, jobject thiz) {
 
 ```java
 // Logger.java
-package com.example.ammf3;
+package com.example.AuroraCore;
 
 public class Logger {
     // Log levels matching C++ enum
@@ -223,7 +223,7 @@ public class Logger {
     public static final int FATAL = 5;
     
     static {
-        System.loadLibrary("ammf3_jni");
+        System.loadLibrary("AuroraCore_jni");
     }
     
     public native boolean initLogger(String logPath, long maxFileSize, int maxFiles,
@@ -243,7 +243,7 @@ public class Logger {
 }
 
 // FileWatcher.java
-package com.example.ammf3;
+package com.example.AuroraCore;
 
 public class FileWatcher {
     // Event types matching C++ enum
@@ -259,7 +259,7 @@ public class FileWatcher {
     }
     
     static {
-        System.loadLibrary("ammf3_jni");
+        System.loadLibrary("AuroraCore_jni");
     }
     
     public native boolean initWatcher();
@@ -274,7 +274,7 @@ public class FileWatcher {
 
 ```java
 // MainActivity.java
-package com.example.ammf3demo;
+package com.example.AuroraCoredemo;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -282,12 +282,12 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-import com.example.ammf3.Logger;
-import com.example.ammf3.FileWatcher;
+import com.example.AuroraCore.Logger;
+import com.example.AuroraCore.FileWatcher;
 import java.io.File;
 
 public class MainActivity extends Activity {
-    private static final String TAG = "AMMF3Demo";
+    private static final String TAG = "AuroraCoreDemo";
     private Logger logger;
     private FileWatcher fileWatcher;
     private TextView statusText;
@@ -302,12 +302,12 @@ public class MainActivity extends Activity {
         Button logButton = findViewById(R.id.log_button);
         Button watchButton = findViewById(R.id.watch_button);
         
-        initButton.setOnClickListener(v -> initializeAMMF3());
+        initButton.setOnClickListener(v -> initializeAuroraCore());
         logButton.setOnClickListener(v -> testLogging());
         watchButton.setOnClickListener(v -> testFileWatching());
     }
     
-    private void initializeAMMF3() {
+    private void initializeAuroraCore() {
         try {
             // Initialize logger
             logger = new Logger();
@@ -322,7 +322,7 @@ public class MainActivity extends Activity {
             );
             
             if (success) {
-                logger.info("AMMF3 Logger initialized successfully");
+                logger.info("AuroraCore Logger initialized successfully");
                 updateStatus("Logger initialized");
             } else {
                 updateStatus("Logger initialization failed");
@@ -332,14 +332,14 @@ public class MainActivity extends Activity {
             // Initialize file watcher
             fileWatcher = new FileWatcher();
             if (fileWatcher.initWatcher()) {
-                logger.info("AMMF3 FileWatcher initialized successfully");
+                logger.info("AuroraCore FileWatcher initialized successfully");
                 updateStatus("Logger and FileWatcher initialized");
             } else {
                 updateStatus("FileWatcher initialization failed");
             }
             
         } catch (Exception e) {
-            Log.e(TAG, "Failed to initialize AMMF3", e);
+            Log.e(TAG, "Failed to initialize AuroraCore", e);
             updateStatus("Initialization failed: " + e.getMessage());
         }
     }
@@ -453,7 +453,7 @@ public class MainActivity extends Activity {
 ```cmake
 # CMakeLists.txt
 cmake_minimum_required(VERSION 3.18.1)
-project("ammf3_jni")
+project("AuroraCore_jni")
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 20)
@@ -463,33 +463,33 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_library(log-lib log)
 find_library(android-lib android)
 
-# Include AMMF3-Core
-set(AMMF3_ROOT "/path/to/ammf3-core")
-include_directories(${AMMF3_ROOT}/src)
+# Include AuroraCore
+set(AuroraCore_ROOT "/path/to/AuroraCore")
+include_directories(${AuroraCore_ROOT}/src)
 
-# Add AMMF3-Core libraries
-add_library(ammf3_logger SHARED IMPORTED)
-set_target_properties(ammf3_logger PROPERTIES
-    IMPORTED_LOCATION ${AMMF3_ROOT}/lib/${ANDROID_ABI}/libammf3_logger.so)
+# Add AuroraCore libraries
+add_library(AuroraCore_logger SHARED IMPORTED)
+set_target_properties(AuroraCore_logger PROPERTIES
+    IMPORTED_LOCATION ${AuroraCore_ROOT}/lib/${ANDROID_ABI}/libAuroraCore_logger.so)
 
-add_library(ammf3_filewatcher SHARED IMPORTED)
-set_target_properties(ammf3_filewatcher PROPERTIES
-    IMPORTED_LOCATION ${AMMF3_ROOT}/lib/${ANDROID_ABI}/libammf3_filewatcher.so)
+add_library(AuroraCore_filewatcher SHARED IMPORTED)
+set_target_properties(AuroraCore_filewatcher PROPERTIES
+    IMPORTED_LOCATION ${AuroraCore_ROOT}/lib/${ANDROID_ABI}/libAuroraCore_filewatcher.so)
 
 # Create JNI library
-add_library(ammf3_jni SHARED ammf3_jni.cpp)
+add_library(AuroraCore_jni SHARED AuroraCore_jni.cpp)
 
 # Link libraries
-target_link_libraries(ammf3_jni
-    ammf3_logger
-    ammf3_filewatcher
+target_link_libraries(AuroraCore_jni
+    AuroraCore_logger
+    AuroraCore_filewatcher
     ${log-lib}
     ${android-lib})
 ```
 
 ## Example 2: Unity Plugin Integration
 
-Integrating AMMF3-Core as a Unity plugin for game development.
+Integrating AuroraCore as a Unity plugin for game development.
 
 ### Unity Plugin Wrapper
 
@@ -601,12 +601,12 @@ void DestroyUnityFileWatcher() {
 ### Unity C# Interface
 
 ```csharp
-// AMMF3Unity.cs
+// AuroraCoreUnity.cs
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-public class AMMF3Unity : MonoBehaviour
+public class AuroraCoreUnity : MonoBehaviour
 {
     // Log levels
     public enum LogLevel
@@ -639,34 +639,34 @@ public class AMMF3Unity : MonoBehaviour
     public static event FileEventCallback OnFileEvent;
     
     // Native function imports
-    [DllImport("ammf3_unity")]
+    [DllImport("AuroraCore_unity")]
     private static extern int InitUnityLogger(string logPath, int maxFileSize, int maxFiles);
     
-    [DllImport("ammf3_unity")]
+    [DllImport("AuroraCore_unity")]
     private static extern void UnityLog(int level, string message);
     
-    [DllImport("ammf3_unity")]
+    [DllImport("AuroraCore_unity")]
     private static extern void SetUnityLogCallback(LogCallback callback);
     
-    [DllImport("ammf3_unity")]
+    [DllImport("AuroraCore_unity")]
     private static extern void DestroyUnityLogger();
     
-    [DllImport("ammf3_unity")]
+    [DllImport("AuroraCore_unity")]
     private static extern int InitUnityFileWatcher();
     
-    [DllImport("ammf3_unity")]
+    [DllImport("AuroraCore_unity")]
     private static extern int AddUnityWatch(string path);
     
-    [DllImport("ammf3_unity")]
+    [DllImport("AuroraCore_unity")]
     private static extern void SetUnityFileEventCallback(FileEventCallback callback);
     
-    [DllImport("ammf3_unity")]
+    [DllImport("AuroraCore_unity")]
     private static extern void StartUnityFileWatcher();
     
-    [DllImport("ammf3_unity")]
+    [DllImport("AuroraCore_unity")]
     private static extern void StopUnityFileWatcher();
     
-    [DllImport("ammf3_unity")]
+    [DllImport("AuroraCore_unity")]
     private static extern void DestroyUnityFileWatcher();
     
     // Static callbacks for native code
@@ -725,22 +725,22 @@ public class AMMF3Unity : MonoBehaviour
     // Unity lifecycle
     private void Start()
     {
-        // Initialize AMMF3 when the GameObject starts
+        // Initialize AuroraCore when the GameObject starts
         string logPath = Application.persistentDataPath + "/game.log";
         
         if (InitializeLogger(logPath))
         {
-            Debug.Log("AMMF3 Logger initialized");
+            Debug.Log("AuroraCore Logger initialized");
             LogInfo("Unity game started");
         }
         else
         {
-            Debug.LogError("Failed to initialize AMMF3 Logger");
+            Debug.LogError("Failed to initialize AuroraCore Logger");
         }
         
         if (InitializeFileWatcher())
         {
-            Debug.Log("AMMF3 FileWatcher initialized");
+            Debug.Log("AuroraCore FileWatcher initialized");
             
             // Watch the persistent data path
             if (AddWatch(Application.persistentDataPath))
@@ -751,7 +751,7 @@ public class AMMF3Unity : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Failed to initialize AMMF3 FileWatcher");
+            Debug.LogError("Failed to initialize AuroraCore FileWatcher");
         }
         
         // Subscribe to events
@@ -780,14 +780,14 @@ public class AMMF3Unity : MonoBehaviour
             case LogLevel.Trace:
             case LogLevel.Debug:
             case LogLevel.Info:
-                Debug.Log($"[AMMF3] {message}");
+                Debug.Log($"[AuroraCore] {message}");
                 break;
             case LogLevel.Warning:
-                Debug.LogWarning($"[AMMF3] {message}");
+                Debug.LogWarning($"[AuroraCore] {message}");
                 break;
             case LogLevel.Error:
             case LogLevel.Fatal:
-                Debug.LogError($"[AMMF3] {message}");
+                Debug.LogError($"[AuroraCore] {message}");
                 break;
         }
     }
@@ -811,12 +811,12 @@ public class GameManager : MonoBehaviour
 {
     private void Start()
     {
-        // AMMF3Unity will be initialized automatically
+        // AuroraCoreUnity will be initialized automatically
         
         // Log game events
-        AMMF3Unity.LogInfo("Game started");
-        AMMF3Unity.LogDebug($"Unity version: {Application.unityVersion}");
-        AMMF3Unity.LogInfo($"Platform: {Application.platform}");
+        AuroraCoreUnity.LogInfo("Game started");
+        AuroraCoreUnity.LogDebug($"Unity version: {Application.unityVersion}");
+        AuroraCoreUnity.LogInfo($"Platform: {Application.platform}");
     }
     
     private void Update()
@@ -825,42 +825,42 @@ public class GameManager : MonoBehaviour
         if (Time.frameCount % 300 == 0) // Every 5 seconds at 60 FPS
         {
             float fps = 1.0f / Time.deltaTime;
-            AMMF3Unity.LogDebug($"FPS: {fps:F1}, Memory: {System.GC.GetTotalMemory(false) / 1024 / 1024}MB");
+            AuroraCoreUnity.LogDebug($"FPS: {fps:F1}, Memory: {System.GC.GetTotalMemory(false) / 1024 / 1024}MB");
         }
     }
     
     public void OnPlayerAction(string action)
     {
-        AMMF3Unity.LogInfo($"Player action: {action}");
+        AuroraCoreUnity.LogInfo($"Player action: {action}");
     }
     
     public void OnGameEvent(string eventName, string details)
     {
-        AMMF3Unity.LogInfo($"Game event: {eventName} - {details}");
+        AuroraCoreUnity.LogInfo($"Game event: {eventName} - {details}");
     }
     
     private void OnApplicationPause(bool pauseStatus)
     {
         if (pauseStatus)
         {
-            AMMF3Unity.LogInfo("Game paused");
+            AuroraCoreUnity.LogInfo("Game paused");
         }
         else
         {
-            AMMF3Unity.LogInfo("Game resumed");
+            AuroraCoreUnity.LogInfo("Game resumed");
         }
     }
     
     private void OnApplicationFocus(bool hasFocus)
     {
-        AMMF3Unity.LogInfo($"Game focus changed: {hasFocus}");
+        AuroraCoreUnity.LogInfo($"Game focus changed: {hasFocus}");
     }
 }
 ```
 
 ## Example 3: System Service Integration
 
-Integrating AMMF3-Core into a system service for system-wide monitoring.
+Integrating AuroraCore into a system service for system-wide monitoring.
 
 ### System Service Implementation
 
@@ -1179,7 +1179,7 @@ int main(int argc, char* argv[]) {
 # system_monitor_service.sh
 
 SERVICE_NAME="system_monitor"
-SERVICE_BINARY="/data/local/tmp/ammf3/bin/system_monitor"
+SERVICE_BINARY="/data/local/tmp/AuroraCore/bin/system_monitor"
 PID_FILE="/data/local/tmp/system_monitor.pid"
 LOG_FILE="/data/local/tmp/logs/system_monitor.log"
 
@@ -1305,4 +1305,4 @@ esac
 exit $?
 ```
 
-These integration examples demonstrate how AMMF3-Core can be seamlessly integrated into various platforms and frameworks, providing consistent logging and file monitoring capabilities across different environments and use cases.
+These integration examples demonstrate how AuroraCore can be seamlessly integrated into various platforms and frameworks, providing consistent logging and file monitoring capabilities across different environments and use cases.

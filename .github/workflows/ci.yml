@@ -128,11 +128,11 @@ jobs:
         echo "🖥️ Testing command-line interfaces..."
         
         # Create test directory
-        mkdir -p /tmp/ammf3-test
+        mkdir -p /tmp/AuroraCore-test
         
         # Test logger daemon startup (background)
         echo "🚀 Testing logger daemon startup..."
-        timeout 10s ./src/logger/logger_daemon -f /tmp/ammf3-test/test.log -p /tmp/ammf3-test/logger.sock &
+        timeout 10s ./src/logger/logger_daemon -f /tmp/AuroraCore-test/test.log -p /tmp/AuroraCore-test/logger.sock &
         DAEMON_PID=$!
         sleep 2
         
@@ -142,7 +142,7 @@ jobs:
           
           # Test logger client
           echo "📝 Testing logger client..."
-          ./src/logger/logger_client -p /tmp/ammf3-test/logger.sock -l info "Test message from CI" || echo "Client test completed"
+          ./src/logger/logger_client -p /tmp/AuroraCore-test/logger.sock -l info "Test message from CI" || echo "Client test completed"
           
           # Stop daemon gracefully
           kill -TERM $DAEMON_PID 2>/dev/null || true
@@ -156,9 +156,9 @@ jobs:
         echo "👁️ Testing filewatcher..."
         
         # Create the file first before watching it
-        echo "initial" > /tmp/ammf3-test/watch.txt
+        echo "initial" > /tmp/AuroraCore-test/watch.txt
         
-        timeout 5s ./src/filewatcher/filewatcher -o /tmp/ammf3-test/watch.txt "echo File changed" &
+        timeout 5s ./src/filewatcher/filewatcher -o /tmp/AuroraCore-test/watch.txt "echo File changed" &
         WATCHER_PID=$!
         sleep 1
         
@@ -180,11 +180,11 @@ jobs:
         
         # Start daemon with custom config
         ./src/logger/logger_daemon \
-          -f /tmp/ammf3-test/daemon.log \
+          -f /tmp/AuroraCore-test/daemon.log \
           -s 1048576 \
           -n 3 \
           -b 32768 \
-          -p /tmp/ammf3-test/daemon.sock \
+          -p /tmp/AuroraCore-test/daemon.sock \
           -t 1000 &
         DAEMON_PID=$!
         
@@ -196,7 +196,7 @@ jobs:
           
           # Send multiple log messages
           for i in {1..10}; do
-            ./src/logger/logger_client -p /tmp/ammf3-test/daemon.sock -l info "Stress test message $i" || true
+            ./src/logger/logger_client -p /tmp/AuroraCore-test/daemon.sock -l info "Stress test message $i" || true
             sleep 0.1
           done
           
@@ -222,11 +222,11 @@ jobs:
         
         # Check log files
         echo "📄 Checking generated log files..."
-        ls -la /tmp/ammf3-test/ || true
-        if [ -f "/tmp/ammf3-test/daemon.log" ]; then
+        ls -la /tmp/AuroraCore-test/ || true
+        if [ -f "/tmp/AuroraCore-test/daemon.log" ]; then
           echo "✅ Log file created"
           echo "📋 Log file content (first 10 lines):"
-          head -10 /tmp/ammf3-test/daemon.log || true
+          head -10 /tmp/AuroraCore-test/daemon.log || true
         fi
     
     - name: Memory leak detection
@@ -243,17 +243,17 @@ jobs:
           --show-leak-kinds=all \
           --track-origins=yes \
           --verbose \
-          --log-file=/tmp/ammf3-test/valgrind-daemon.log \
+          --log-file=/tmp/AuroraCore-test/valgrind-daemon.log \
           ./src/logger/logger_daemon \
-            -f /tmp/ammf3-test/valgrind.log \
-            -p /tmp/ammf3-test/valgrind.sock &
+            -f /tmp/AuroraCore-test/valgrind.log \
+            -p /tmp/AuroraCore-test/valgrind.sock &
         VALGRIND_PID=$!
         
         sleep 5
         
         # Send some test messages
         for i in {1..5}; do
-          ./src/logger/logger_client -p /tmp/ammf3-test/valgrind.sock "Valgrind test $i" 2>/dev/null || true
+          ./src/logger/logger_client -p /tmp/AuroraCore-test/valgrind.sock "Valgrind test $i" 2>/dev/null || true
           sleep 0.5
         done
         
@@ -268,21 +268,21 @@ jobs:
           --tool=memcheck \
           --leak-check=full \
           --show-leak-kinds=all \
-          --log-file=/tmp/ammf3-test/valgrind-client.log \
+          --log-file=/tmp/AuroraCore-test/valgrind-client.log \
           ./src/logger/logger_client "Valgrind client test" 2>/dev/null || true
         
         # Test filewatcher for memory leaks (short run)
         echo "🧪 Testing filewatcher memory usage..."
         
         # Create the file first before watching it
-        echo "initial" > /tmp/ammf3-test/valgrind-watch.txt
+        echo "initial" > /tmp/AuroraCore-test/valgrind-watch.txt
         
         timeout 10s valgrind \
           --tool=memcheck \
           --leak-check=full \
           --show-leak-kinds=all \
-          --log-file=/tmp/ammf3-test/valgrind-watcher.log \
-          ./src/filewatcher/filewatcher -o /tmp/ammf3-test/valgrind-watch.txt "echo test" &
+          --log-file=/tmp/AuroraCore-test/valgrind-watcher.log \
+          ./src/filewatcher/filewatcher -o /tmp/AuroraCore-test/valgrind-watch.txt "echo test" &
         WATCHER_VALGRIND_PID=$!
 
         kill -TERM $WATCHER_VALGRIND_PID 2>/dev/null || true
@@ -290,18 +290,18 @@ jobs:
         # Analyze Valgrind results
         echo "📊 Valgrind Results Summary:"
         echo "=== Logger Daemon ==="
-        if [ -f "/tmp/ammf3-test/valgrind-daemon.log" ]; then
-          grep -E "(ERROR SUMMARY|definitely lost|indirectly lost|possibly lost)" /tmp/ammf3-test/valgrind-daemon.log || echo "No major issues found"
+        if [ -f "/tmp/AuroraCore-test/valgrind-daemon.log" ]; then
+          grep -E "(ERROR SUMMARY|definitely lost|indirectly lost|possibly lost)" /tmp/AuroraCore-test/valgrind-daemon.log || echo "No major issues found"
         fi
         
         echo "=== Logger Client ==="
-        if [ -f "/tmp/ammf3-test/valgrind-client.log" ]; then
-          grep -E "(ERROR SUMMARY|definitely lost|indirectly lost|possibly lost)" /tmp/ammf3-test/valgrind-client.log || echo "No major issues found"
+        if [ -f "/tmp/AuroraCore-test/valgrind-client.log" ]; then
+          grep -E "(ERROR SUMMARY|definitely lost|indirectly lost|possibly lost)" /tmp/AuroraCore-test/valgrind-client.log || echo "No major issues found"
         fi
         
         echo "=== FileWatcher ==="
-        if [ -f "/tmp/ammf3-test/valgrind-watcher.log" ]; then
-          grep -E "(ERROR SUMMARY|definitely lost|indirectly lost|possibly lost)" /tmp/ammf3-test/valgrind-watcher.log || echo "No major issues found"
+        if [ -f "/tmp/AuroraCore-test/valgrind-watcher.log" ]; then
+          grep -E "(ERROR SUMMARY|definitely lost|indirectly lost|possibly lost)" /tmp/AuroraCore-test/valgrind-watcher.log || echo "No major issues found"
         fi
     
     - name: Upload test results and logs
@@ -310,7 +310,7 @@ jobs:
       with:
         name: linux-native-test-results
         path: |
-          /tmp/ammf3-test/
+          /tmp/AuroraCore-test/
           build-native/tests/
         retention-days: 7
 

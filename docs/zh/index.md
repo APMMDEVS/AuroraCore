@@ -2,19 +2,19 @@
 layout: home
 
 hero:
-  name: "AMMF3-Core"
+  name: "AuroraCore"
   text: "Android Root 日志系统与文件监听工具"
   tagline: 专为Android root环境设计的高性能日志记录和文件监控解决方案
   image:
     src: /logo.svg
-    alt: AMMF3-Core
+    alt: AuroraCore
   actions:
     - theme: brand
       text: 快速开始
       link: /zh/guide/getting-started
     - theme: alt
       text: 查看 GitHub
-      link: https://github.com/Aurora-Nasa-1/AMMF3-Core
+      link: https://github.com/Aurora-Nasa-1/AuroraCore
     - theme: alt
       text: English Docs
       link: /
@@ -100,7 +100,7 @@ int main() {
 }
 ```
 
-## 为什么选择 AMMF3-Core？
+## 为什么选择 AuroraCore？
 
 - **🎯 专门构建**: 专为Android root环境约束而设计
 - **⚡ 高性能**: 优化以实现最小的CPU使用率和功耗
@@ -110,11 +110,11 @@ int main() {
 
 ## 开始使用
 
-准备将AMMF3-Core集成到你的Android项目中？查看我们的[快速开始指南](/zh/guide/getting-started)或浏览[API参考](/zh/api/logger-api)获取详细文档。
+准备将AuroraCore集成到你的Android项目中？查看我们的[快速开始指南](/zh/guide/getting-started)或浏览[API参考](/zh/api/logger-api)获取详细文档。
 
 ## 社区与支持
 
 - 📖 [文档](/zh/guide/introduction)
-- 🐛 [问题跟踪](https://github.com/Aurora-Nasa-1/AMMF3-Core/issues)
-- 💬 [讨论区](https://github.com/Aurora-Nasa-1/AMMF3-Core/discussions)
+- 🐛 [问题跟踪](https://github.com/Aurora-Nasa-1/AuroraCore/issues)
+- 💬 [讨论区](https://github.com/Aurora-Nasa-1/AuroraCore/discussions)
 - 📧 [联系我们](mailto:support@Aurora-Nasa-1.com)

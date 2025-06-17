@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# AMMF3-Core Usage Examples
+# AuroraCore Usage Examples
 # This script demonstrates how to use the logger and filewatcher tools
 
-echo "=== AMMF3-Core Usage Examples ==="
+echo "=== AuroraCore Usage Examples ==="
 
 # Build the project first
 echo "Building project..."

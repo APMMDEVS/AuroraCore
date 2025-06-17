@@ -1,6 +1,6 @@
-# AMMF3-Core Documentation
+# AuroraCore Documentation
 
-这是 AMMF3-Core 项目的官方文档，使用 VitePress 构建，支持中英文双语。
+这是 AuroraCore 项目的官方文档，使用 VitePress 构建，支持中英文双语。
 
 ## 📚 文档结构
 
@@ -188,4 +188,4 @@ npm run deploy
 
 ---
 
-如有任何问题或建议，请在 [GitHub Issues](https://github.com/Aurora-Nasa-1/AMMF3-Core/issues) 中提出。
+如有任何问题或建议，请在 [GitHub Issues](https://github.com/Aurora-Nasa-1/AuroraCore/issues) 中提出。

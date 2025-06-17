@@ -151,13 +151,13 @@ private:
 };
 
 int main() {
-    std::cout << "AMMF3-Core API Example" << std::endl;
+    std::cout << "AuroraCore API Example" << std::endl;
     std::cout << "=====================" << std::endl;
     
     // Create initial config file
     {
         std::ofstream config("config.txt");
-        config << "app_name=AMMF3-Example" << std::endl;
+        config << "app_name=AuroraCore-Example" << std::endl;
         config << "log_level=INFO" << std::endl;
         config << "max_connections=100" << std::endl;
     }

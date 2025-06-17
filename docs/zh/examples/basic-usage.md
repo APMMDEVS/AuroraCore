@@ -1,6 +1,6 @@
 # 基本用法示例
 
-本文档提供了 AMMF3-Core 的实际集成示例，展示如何在真实项目中使用 Logger 和 FileWatcher API。
+本文档提供了 AuroraCore 的实际集成示例，展示如何在真实项目中使用 Logger 和 FileWatcher API。
 
 ## 示例 1：简单应用程序日志记录
 
@@ -124,18 +124,18 @@ project(SimpleApp)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# 添加 AMMF3-Core 路径
-set(AMMF3_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../AMMF3-Core")
-include_directories(${AMMF3_ROOT}/loggerAPI)
-include_directories(${AMMF3_ROOT}/filewatcherAPI)
+# 添加 AuroraCore 路径
+set(AuroraCore_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../AuroraCore")
+include_directories(${AuroraCore_ROOT}/loggerAPI)
+include_directories(${AuroraCore_ROOT}/filewatcherAPI)
 
 # 添加可执行文件
 add_executable(simple_app simple_app.cpp)
 
-# 链接 AMMF3-Core 库
+# 链接 AuroraCore 库
 target_link_libraries(simple_app 
-    ${AMMF3_ROOT}/build/logger/liblogger.a
-    ${AMMF3_ROOT}/build/loggerAPI/libloggerAPI.a
+    ${AuroraCore_ROOT}/build/logger/liblogger.a
+    ${AuroraCore_ROOT}/build/loggerAPI/libloggerAPI.a
     pthread
 )
 
@@ -921,4 +921,4 @@ tail -f /data/local/tmp/system_monitor.log
 - 适当的日志级别
 - 性能考虑
 
-这些示例展示了如何在实际项目中有效地使用 AMMF3-Core 的功能，提供了从简单应用到复杂系统服务的完整解决方案。
+这些示例展示了如何在实际项目中有效地使用 AuroraCore 的功能，提供了从简单应用到复杂系统服务的完整解决方案。

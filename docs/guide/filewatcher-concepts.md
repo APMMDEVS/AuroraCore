@@ -1,6 +1,6 @@
 # FileWatcher System Core Concepts
 
-The AMMF3-Core FileWatcher is a high-performance, event-driven file system monitoring solution built specifically for Android environments. This guide explores the core concepts and architecture of the FileWatcher component.
+The AuroraCore FileWatcher is a high-performance, event-driven file system monitoring solution built specifically for Android environments. This guide explores the core concepts and architecture of the FileWatcher component.
 
 ## Architecture Overview
 

@@ -1,6 +1,6 @@
 # Command Line Tools Reference
 
-AMMF3-Core provides powerful command-line tools for system-wide logging and file monitoring. These tools are designed for Android root environments and offer high-performance, daemon-based logging solutions.
+AuroraCore provides powerful command-line tools for system-wide logging and file monitoring. These tools are designed for Android root environments and offer high-performance, daemon-based logging solutions.
 
 ## Overview
 

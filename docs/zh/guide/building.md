@@ -1,6 +1,6 @@
 # 从源码构建
 
-在不同平台和配置下从源码构建 AMMF3-Core 的完整指南。
+在不同平台和配置下从源码构建 AuroraCore 的完整指南。
 
 ## 📋 前置要求
 
@@ -23,8 +23,8 @@
 ### 1. 克隆仓库
 
 ```bash
-git clone https://github.com/your-username/AMMF3-Core.git
-cd AMMF3-Core
+git clone https://github.com/your-username/AuroraCore.git
+cd AuroraCore
 ```
 
 ### 2. 设置 Android NDK
@@ -320,7 +320,7 @@ cpack -G ZIP
 sudo make install
 
 # 安装到自定义位置
-cmake .. -DCMAKE_INSTALL_PREFIX=/opt/ammf3-core
+cmake .. -DCMAKE_INSTALL_PREFIX=/opt/AuroraCore
 make install
 ```
 
@@ -429,7 +429,7 @@ cmake .. -DUSE_PRECOMPILED_HEADERS=ON
 
 1. 查看本指南的常见解决方案
 2. 查阅[常见问题](/zh/guide/faq)进行故障排除
-3. 搜索 [GitHub Issues](https://github.com/your-username/AMMF3-Core/issues)
+3. 搜索 [GitHub Issues](https://github.com/your-username/AuroraCore/issues)
 4. 创建新问题并包含：
    - 构建环境详细信息
    - 完整错误消息

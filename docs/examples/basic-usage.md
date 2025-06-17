@@ -1,6 +1,6 @@
 # Basic Usage Examples
 
-This page provides practical examples of how to integrate and use AMMF3-Core in real-world scenarios. Each example includes complete, runnable code with explanations.
+This page provides practical examples of how to integrate and use AuroraCore in real-world scenarios. Each example includes complete, runnable code with explanations.
 
 ## Example 1: Simple Application Logging
 
@@ -114,8 +114,8 @@ project(SimpleApp)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Add AMMF3-Core
-add_subdirectory(../AMMF3-Core AMMF3-Core)
+# Add AuroraCore
+add_subdirectory(../AuroraCore AuroraCore)
 
 # Create executable
 add_executable(simple_app simple_app.cpp)
@@ -123,8 +123,8 @@ add_executable(simple_app simple_app.cpp)
 # Link logger API
 target_link_libraries(simple_app PRIVATE loggerAPI)
 
-# Include AMMF3-Core headers
-target_include_directories(simple_app PRIVATE ../AMMF3-Core/src)
+# Include AuroraCore headers
+target_include_directories(simple_app PRIVATE ../AuroraCore/src)
 ```
 
 ### Building and Running
@@ -856,4 +856,4 @@ adb shell cat /data/local/tmp/status/service_status.txt
 6. **Use atomic flags** for thread-safe shutdown coordination
 7. **Combine both APIs** for comprehensive monitoring and logging solutions
 
-These examples provide a solid foundation for integrating AMMF3-Core into your Android applications and system services.
+These examples provide a solid foundation for integrating AuroraCore into your Android applications and system services.

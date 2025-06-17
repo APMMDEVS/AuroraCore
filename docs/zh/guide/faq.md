@@ -1,17 +1,17 @@
 # 常见问题
 
-关于 AMMF3-Core 使用过程中常见问题的解答和解决方案。
+关于 AuroraCore 使用过程中常见问题的解答和解决方案。
 
 ## 📦 安装和设置
 
-### Q: 如何安装 AMMF3-Core？
+### Q: 如何安装 AuroraCore？
 
-**A:** AMMF3-Core 需要从源码编译安装：
+**A:** AuroraCore 需要从源码编译安装：
 
 ```bash
 # 克隆仓库
-git clone https://github.com/your-username/AMMF3-Core.git
-cd AMMF3-Core
+git clone https://github.com/your-username/AuroraCore.git
+cd AuroraCore
 
 # 创建构建目录
 mkdir build && cd build
@@ -27,7 +27,7 @@ make -j$(nproc)
 
 ### Q: 支持哪些 Android 版本？
 
-**A:** AMMF3-Core 支持：
+**A:** AuroraCore 支持：
 - **最低版本**: Android 5.0 (API 21)
 - **推荐版本**: Android 8.0+ (API 26+)
 - **架构支持**: ARM64、ARMv7、x86_64
@@ -252,7 +252,7 @@ dependencies {
 ```cpp
 // native-lib.cpp
 #include <jni.h>
-#include "ammf3/logger.h"
+#include "AuroraCore/logger.h"
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_MainActivity_initLogger(JNIEnv *env, jobject thiz, jstring log_dir) {
@@ -271,7 +271,7 @@ Java_com_example_MainActivity_initLogger(JNIEnv *env, jobject thiz, jstring log_
 // MainActivity.java
 public class MainActivity extends AppCompatActivity {
     static {
-        System.loadLibrary("ammf3-core");
+        System.loadLibrary("AuroraCore");
     }
     
     public native void initLogger(String logDir);
@@ -314,10 +314,10 @@ extern "C" {
 using System.Runtime.InteropServices;
 
 public class LoggerPlugin {
-    [DllImport("ammf3-core")]
+    [DllImport("AuroraCore")]
     private static extern void InitLogger(string logDir);
     
-    [DllImport("ammf3-core")]
+    [DllImport("AuroraCore")]
     private static extern void LogMessage(int level, string message);
     
     public static void Initialize(string logDir) {
@@ -346,7 +346,7 @@ public:
             case LogLevel::WARN:  priority = ANDROID_LOG_WARN; break;
             case LogLevel::ERROR: priority = ANDROID_LOG_ERROR; break;
         }
-        __android_log_print(priority, "AMMF3", "%s", message.c_str());
+        __android_log_print(priority, "AuroraCore", "%s", message.c_str());
     }
 };
 
@@ -427,8 +427,8 @@ std::thread processor([&queue]() {
 
 ```cpp
 // 编译时启用调试
-#define AMMF3_DEBUG 1
-#include "ammf3/logger.h"
+#define AuroraCore_DEBUG 1
+#include "AuroraCore/logger.h"
 
 // 运行时设置调试级别
 LoggerConfig config;
@@ -583,8 +583,8 @@ cmake .. --debug-output
 ```cmake
 # CMakeLists.txt 中确保正确链接
 target_link_libraries(your_target
-    ammf3-logger
-    ammf3-filewatcher
+    AuroraCore-logger
+    AuroraCore-filewatcher
     log  # Android log 库
     pthread
 )
@@ -615,8 +615,8 @@ target_include_directories(your_target PRIVATE
    - [API 参考](/zh/api/)
 
 2. **搜索已知问题**：
-   - [GitHub Issues](https://github.com/your-username/AMMF3-Core/issues)
-   - [讨论区](https://github.com/your-username/AMMF3-Core/discussions)
+   - [GitHub Issues](https://github.com/your-username/AuroraCore/issues)
+   - [讨论区](https://github.com/your-username/AuroraCore/discussions)
 
 ### 💬 社区支持
 
@@ -633,9 +633,9 @@ target_include_directories(your_target PRIVATE
 
 ### 📧 联系方式
 
-- **邮箱**: support@ammf3-core.com
+- **邮箱**: support@AuroraCore.com
 - **GitHub**: [@your-username](https://github.com/your-username)
-- **文档**: [https://your-username.github.io/AMMF3-Core](https://your-username.github.io/AMMF3-Core)
+- **文档**: [https://your-username.github.io/AuroraCore](https://your-username.github.io/AuroraCore)
 
 ---
 

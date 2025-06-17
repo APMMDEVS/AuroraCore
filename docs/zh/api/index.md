@@ -1,6 +1,6 @@
 # API 参考
 
-AMMF3-Core 组件的完整 API 文档。
+AuroraCore 组件的完整 API 文档。
 
 ## 📚 可用 API
 
@@ -29,7 +29,7 @@ AMMF3-Core 组件的完整 API 文档。
 ### 基本 Logger 使用
 
 ```cpp
-#include "ammf3/logger_api.hpp"
+#include "AuroraCore/logger_api.hpp"
 
 // 初始化日志器
 LoggerConfig config;
@@ -46,7 +46,7 @@ logger.error("发生错误: {}", error_message);
 ### 基本 FileWatcher 使用
 
 ```cpp
-#include "ammf3/filewatcher_api.hpp"
+#include "AuroraCore/filewatcher_api.hpp"
 
 // 设置文件监视器
 FileWatcherConfig config;
@@ -147,4 +147,4 @@ struct FileWatcherConfig {
 - 查看每个组件的详细 API 文档
 - 查阅[常见问题](/zh/guide/faq)了解常见问题
 - 浏览[示例](/zh/examples/basic-usage)了解使用模式
-- 在 [GitHub](https://github.com/your-username/AMMF3-Core/issues) 上提交问题
+- 在 [GitHub](https://github.com/your-username/AuroraCore/issues) 上提交问题

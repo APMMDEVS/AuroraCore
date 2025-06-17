@@ -1,15 +1,15 @@
-# Introduction to AMMF3-Core
+# Introduction to AuroraCore
 
-Welcome to AMMF3-Core (Advanced Multi-Modal Framework 3 Core), a high-performance, production-ready logging and file monitoring framework designed specifically for Android environments.
+Welcome to AuroraCore (Advanced Multi-Modal Framework 3 Core), a high-performance, production-ready logging and file monitoring framework designed specifically for Android environments.
 
-## 🎯 What is AMMF3-Core?
+## 🎯 What is AuroraCore?
 
-AMMF3-Core is a comprehensive C++ framework that provides two essential components for Android applications:
+AuroraCore is a comprehensive C++ framework that provides two essential components for Android applications:
 
 1. **High-Performance Logger** - A robust logging system with daemon mode support
 2. **Real-Time FileWatcher** - An efficient file system monitoring solution
 
-Built with performance and reliability in mind, AMMF3-Core is designed to handle the demanding requirements of modern Android applications while maintaining minimal resource overhead.
+Built with performance and reliability in mind, AuroraCore is designed to handle the demanding requirements of modern Android applications while maintaining minimal resource overhead.
 
 ## 🌟 Key Features
 
@@ -65,7 +65,7 @@ Built with performance and reliability in mind, AMMF3-Core is designed to handle
 ┌─────────────────────────────────────────────────────────────┐
 │                    Application Layer                        │
 ├─────────────────────────────────────────────────────────────┤
-│                      AMMF3-Core APIs                       │
+│                      AuroraCore APIs                       │
 ├─────────────────┬───────────────────────┬───────────────────┤
 │   Logger API    │    FileWatcher API    │    CLI Tools      │
 ├─────────────────┼───────────────────────┼───────────────────┤
@@ -110,7 +110,7 @@ Built with performance and reliability in mind, AMMF3-Core is designed to handle
 - **Native Libraries**: C++ library integration
 - **Cross-Platform Development**: Consistent logging across platforms
 
-## 🚀 Why Choose AMMF3-Core?
+## 🚀 Why Choose AuroraCore?
 
 ### Performance Benefits
 
@@ -159,7 +159,7 @@ Built with performance and reliability in mind, AMMF3-Core is designed to handle
 ### Getting Started
 
 1. **Setup Environment**: Install Android NDK and build tools
-2. **Clone Repository**: Get the AMMF3-Core source code
+2. **Clone Repository**: Get the AuroraCore source code
 3. **Build Framework**: Compile for your target architecture
 4. **Integration**: Add to your Android project
 5. **Configuration**: Set up logging and monitoring
@@ -167,17 +167,17 @@ Built with performance and reliability in mind, AMMF3-Core is designed to handle
 ### Development Cycle
 
 1. **Design**: Plan your logging and monitoring strategy
-2. **Implementation**: Integrate AMMF3-Core APIs
+2. **Implementation**: Integrate AuroraCore APIs
 3. **Testing**: Validate functionality and performance
 4. **Optimization**: Fine-tune configuration for your use case
 5. **Deployment**: Deploy to production with monitoring
 
 ## 🔗 Next Steps
 
-Ready to get started with AMMF3-Core? Here's what to do next:
+Ready to get started with AuroraCore? Here's what to do next:
 
 1. **[Getting Started Guide](/guide/getting-started)** - Set up your development environment
-2. **[Building from Source](/guide/building)** - Compile AMMF3-Core for your platform
+2. **[Building from Source](/guide/building)** - Compile AuroraCore for your platform
 3. **[API Reference](/api/)** - Explore the complete API documentation
 4. **[Examples](/examples/basic-usage)** - See practical usage examples
 5. **[Performance Guide](/guide/performance)** - Optimize for your specific needs
@@ -191,4 +191,4 @@ Ready to get started with AMMF3-Core? Here's what to do next:
 
 ---
 
-**Ready to build high-performance Android applications with AMMF3-Core?** Start with our [Getting Started Guide](/guide/getting-started) and join the community of developers building robust, efficient Android solutions.
+**Ready to build high-performance Android applications with AuroraCore?** Start with our [Getting Started Guide](/guide/getting-started) and join the community of developers building robust, efficient Android solutions.
