@@ -1,7 +1,7 @@
 # AuroraCore
 
-[![Build Status](https://github.com/Aurora-Nasa-1/AuroraCore/workflows/CI/badge.svg)](https://github.com/Aurora-Nasa-1/AuroraCore/actions)
-[![Documentation](https://img.shields.io/badge/docs-VitePress-blue)](https://Aurora-Nasa-1.github.io/AuroraCore/)
+[![Build Status](https://github.com/APMMDEVS/AuroraCore/workflows/CI/badge.svg)](https://github.com/APMMDEVS/AuroraCore/actions)
+[![Documentation](https://img.shields.io/badge/docs-VitePress-blue)](https://APMMDEVS.github.io/AuroraCore/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 AuroraCore 是一个高性能的 Android root 日志记录和文件监控框架，专为系统级应用和服务设计。
@@ -19,15 +19,15 @@ AuroraCore 是一个高性能的 Android root 日志记录和文件监控框架�
 
 完整的文档可在以下地址查看：
 
-- **[在线文档](https://Aurora-Nasa-1.github.io/AuroraCore/)** - 完整的 API 参考和使用指南
+- **[在线文档](https://APMMDEVS.github.io/AuroraCore/)** - 完整的 API 参考和使用指南
 - **[快速开始](/docs/guide/getting-started.md)** - 快速入门指南
 - **[API 参考](/docs/api/)** - 详细的 API 文档
 - **[示例代码](/docs/examples/)** - 实际使用示例
 
 ### 文档语言
 
-- [English Documentation](https://Aurora-Nasa-1.github.io/AuroraCore/)
-- [中文文档](https://Aurora-Nasa-1.github.io/AuroraCore/zh/)
+- [English Documentation](https://APMMDEVS.github.io/AuroraCore/)
+- [中文文档](https://APMMDEVS.github.io/AuroraCore/zh/)
 
 ## 🛠️ 快速开始
 
@@ -42,7 +42,7 @@ AuroraCore 是一个高性能的 Android root 日志记录和文件监控框架�
 
 ```bash
 # 克隆仓库
-git clone https://github.com/Aurora-Nasa-1/AuroraCore.git
+git clone https://github.com/APMMDEVS/AuroraCore.git
 cd AuroraCore
 
 # 设置 Android NDK 路径
@@ -168,9 +168,9 @@ make tests
 
 ## 📞 支持
 
-- **问题报告**: [GitHub Issues](https://github.com/Aurora-Nasa-1/AuroraCore/issues)
-- **功能请求**: [GitHub Discussions](https://github.com/Aurora-Nasa-1/AuroraCore/discussions)
-- **文档**: [在线文档](https://Aurora-Nasa-1.github.io/AuroraCore/)
+- **问题报告**: [GitHub Issues](https://github.com/APMMDEVS/AuroraCore/issues)
+- **功能请求**: [GitHub Discussions](https://github.com/APMMDEVS/AuroraCore/discussions)
+- **文档**: [在线文档](https://APMMDEVS.github.io/AuroraCore/)
 
 ## 🔗 相关链接
 

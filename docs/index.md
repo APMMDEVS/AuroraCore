@@ -14,7 +14,7 @@ hero:
       link: /guide/getting-started
     - theme: alt
       text: View on GitHub
-      link: https://github.com/Aurora-Nasa-1/AuroraCore
+      link: https://github.com/APMMDEVS/AuroraCore
     - theme: alt
       text: 中文文档
       link: /zh/
@@ -115,6 +115,6 @@ Ready to integrate AuroraCore into your Android project? Check out our [Getting 
 ## Community & Support
 
 - 📖 [Documentation](/guide/introduction)
-- 🐛 [Issue Tracker](https://github.com/Aurora-Nasa-1/AuroraCore/issues)
-- 💬 [Discussions](https://github.com/Aurora-Nasa-1/AuroraCore/discussions)
-- 📧 [Contact Us](mailto:support@Aurora-Nasa-1.com)
+- 🐛 [Issue Tracker](https://github.com/APMMDEVS/AuroraCore/issues)
+- 💬 [Discussions](https://github.com/APMMDEVS/AuroraCore/discussions)
+- 📧 [Contact Us](mailto:support@APMMDEVS.com)

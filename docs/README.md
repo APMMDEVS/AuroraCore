@@ -188,4 +188,4 @@ npm run deploy
 
 ---
 
-如有任何问题或建议，请在 [GitHub Issues](https://github.com/Aurora-Nasa-1/AuroraCore/issues) 中提出。
+如有任何问题或建议，请在 [GitHub Issues](https://github.com/APMMDEVS/AuroraCore/issues) 中提出。

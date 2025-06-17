@@ -18,7 +18,7 @@
 ### 1. 克隆仓库
 
 ```bash
-git clone https://github.com/Aurora-Nasa-1/AuroraCore.git
+git clone https://github.com/APMMDEVS/AuroraCore.git
 cd AuroraCore
 ```
 

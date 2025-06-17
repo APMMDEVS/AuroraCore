@@ -14,7 +14,7 @@ hero:
       link: /zh/guide/getting-started
     - theme: alt
       text: 查看 GitHub
-      link: https://github.com/Aurora-Nasa-1/AuroraCore
+      link: https://github.com/APMMDEVS/AuroraCore
     - theme: alt
       text: English Docs
       link: /
@@ -115,6 +115,6 @@ int main() {
 ## 社区与支持
 
 - 📖 [文档](/zh/guide/introduction)
-- 🐛 [问题跟踪](https://github.com/Aurora-Nasa-1/AuroraCore/issues)
-- 💬 [讨论区](https://github.com/Aurora-Nasa-1/AuroraCore/discussions)
-- 📧 [联系我们](mailto:support@Aurora-Nasa-1.com)
+- 🐛 [问题跟踪](https://github.com/APMMDEVS/AuroraCore/issues)
+- 💬 [讨论区](https://github.com/APMMDEVS/AuroraCore/discussions)
+- 📧 [联系我们](mailto:support@APMMDEVS.com)

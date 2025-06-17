@@ -32,7 +32,7 @@ This comprehensive guide will walk you through installing AuroraCore on your And
 
 ```bash
 # Download the latest release
-wget https://github.com/Aurora-Nasa-1/AuroraCore/releases/latest/download/AuroraCore-arm64.tar.gz
+wget https://github.com/APMMDEVS/AuroraCore/releases/latest/download/AuroraCore-arm64.tar.gz
 
 # Extract the archive
 tar -xzf AuroraCore-arm64.tar.gz
@@ -74,7 +74,7 @@ adb shell chmod -R 644 /data/local/tmp/AuroraCore/lib/
 #### Clone Repository
 
 ```bash
-git clone https://github.com/Aurora-Nasa-1/AuroraCore.git
+git clone https://github.com/APMMDEVS/AuroraCore.git
 cd AuroraCore
 git submodule update --init --recursive
 ```
@@ -133,7 +133,7 @@ cpack -G TGZ
 
 ```bash
 # Add AuroraCore repository
-echo "deb https://aurora-nasa-1.github.io/termux-packages/ termux main" >> $PREFIX/etc/apt/sources.list
+echo "deb https://APMMDEVS.github.io/termux-packages/ termux main" >> $PREFIX/etc/apt/sources.list
 
 # Update package list
 apt update
@@ -146,7 +146,7 @@ apt install AuroraCore
 
 ```bash
 # Download package manager
-wget https://github.com/Aurora-Nasa-1/AuroraCore/releases/latest/download/AuroraCore-installer.sh
+wget https://github.com/APMMDEVS/AuroraCore/releases/latest/download/AuroraCore-installer.sh
 chmod +x AuroraCore-installer.sh
 
 # Run installer

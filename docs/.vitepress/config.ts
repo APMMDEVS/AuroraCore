@@ -17,7 +17,7 @@ export default defineConfig({
           { text: 'Guide', link: '/guide/getting-started' },
           { text: 'API Reference', link: '/api/logger-api' },
           { text: 'Examples', link: '/examples/basic-usage' },
-          { text: 'GitHub', link: 'https://github.com/Aurora-Nasa-1/AuroraCore' }
+          { text: 'GitHub', link: 'https://github.com/APMMDEVS/AuroraCore' }
         ],
         sidebar: {
           '/guide/': [
@@ -73,7 +73,7 @@ export default defineConfig({
           { text: '指南', link: '/zh/guide/getting-started' },
           { text: 'API 参考', link: '/zh/api/logger-api' },
           { text: '示例', link: '/zh/examples/basic-usage' },
-          { text: 'GitHub', link: 'https://github.com/Aurora-Nasa-1/AuroraCore' }
+          { text: 'GitHub', link: 'https://github.com/APMMDEVS/AuroraCore' }
         ],
         sidebar: {
           '/zh/guide/': [
@@ -132,7 +132,7 @@ export default defineConfig({
     
     // 社交链接
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/Aurora-Nasa-1/AuroraCore' }
+      { icon: 'github', link: 'https://github.com/APMMDEVS/AuroraCore' }
     ],
     
     // 页脚
@@ -143,7 +143,7 @@ export default defineConfig({
     
     // 编辑链接
     editLink: {
-      pattern: 'https://github.com/Aurora-Nasa-1/AuroraCore/edit/main/docs/:path',
+      pattern: 'https://github.com/APMMDEVS/AuroraCore/edit/main/docs/:path',
       text: 'Edit this page on GitHub'
     },
     
@@ -178,6 +178,6 @@ export default defineConfig({
     ['meta', { property: 'og:locale', content: 'en' }],
     ['meta', { property: 'og:title', content: 'AuroraCore | Android Root Logger & File Watcher' }],
     ['meta', { property: 'og:site_name', content: 'AuroraCore' }],
-    ['meta', { property: 'og:url', content: 'https://Aurora-Nasa-1.github.io/AuroraCore/' }]
+    ['meta', { property: 'og:url', content: 'https://APMMDEVS.github.io/AuroraCore/' }]
   ]
 })
