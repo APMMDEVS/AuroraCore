@@ -1,0 +1,171 @@
+name: Release Build
+
+# Trigger only on release creation (tag push)
+on:
+  release:
+    types: [ created ]
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [arm64-v8a, x86_64]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Install build dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build ccache
+        
+    - name: Setup build cache for release
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: release-${{ matrix.arch }}-${{ github.ref_name }}
+        max-size: 500M
+    
+    - name: Setup Android NDK
+      uses: nttld/setup-ndk@v1
+      with:
+        ndk-version: r27c
+    
+    - name: Configure CMake for Release build
+      run: |
+        export PATH="/usr/lib/ccache:$PATH"
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_ROOT/build/cmake/android.toolchain.cmake \
+          -DANDROID_ABI=${{ matrix.arch }} \
+          -DANDROID_PLATFORM=android-21 \
+          -DBUILD_TESTING=OFF \
+          -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+          -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+          -DCMAKE_CXX_FLAGS_RELEASE="-O3 -DNDEBUG -flto" \
+          -DCMAKE_C_FLAGS_RELEASE="-O3 -DNDEBUG -flto"
+    
+    - name: Build optimized release
+      run: cmake --build build --parallel --config Release
+    
+    - name: Package release binaries
+      run: |
+        mkdir -p artifacts/${{ matrix.arch }}
+        
+        # Copy binaries with error handling
+        cp build/src/logger/logger_daemon artifacts/${{ matrix.arch }}/ 2>/dev/null || echo "logger_daemon not found"
+        cp build/src/logger/logger_client artifacts/${{ matrix.arch }}/ 2>/dev/null || echo "logger_client not found"
+        cp build/src/filewatcher/filewatcher artifacts/${{ matrix.arch }}/ 2>/dev/null || echo "filewatcher not found"
+        
+        # Strip debug symbols for smaller binaries
+        find artifacts/${{ matrix.arch }}/ -type f -executable -exec strip {} \; 2>/dev/null || true
+        
+        # Create version info file
+        echo "AMMF3-Core Release ${{ github.ref_name }}" > artifacts/${{ matrix.arch }}/VERSION
+        echo "Architecture: ${{ matrix.arch }}" >> artifacts/${{ matrix.arch }}/VERSION
+        echo "Build Date: $(date -u)" >> artifacts/${{ matrix.arch }}/VERSION
+        echo "Commit: ${{ github.sha }}" >> artifacts/${{ matrix.arch }}/VERSION
+    
+    - name: Upload release artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-binaries-${{ matrix.arch }}
+        path: artifacts/
+        retention-days: 30
+
+  create-release-packages:
+    needs: build-release
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Download all release artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts/
+    
+    - name: Create release packages
+      run: |
+        mkdir -p release
+        
+        # Create ARM64 release package
+        if [ -d "artifacts/release-binaries-arm64-v8a" ]; then
+          cd artifacts/release-binaries-arm64-v8a
+          tar -czf ../../release/ammf3-core-${{ github.ref_name }}-arm64-v8a.tar.gz arm64-v8a/
+          cd ../..
+        fi
+        
+        # Create x86_64 release package
+        if [ -d "artifacts/release-binaries-x86_64" ]; then
+          cd artifacts/release-binaries-x86_64
+          tar -czf ../../release/ammf3-core-${{ github.ref_name }}-x86_64.tar.gz x86_64/
+          cd ../..
+        fi
+        
+        # Create combined package with both architectures
+        tar -czf release/ammf3-core-${{ github.ref_name }}-all-architectures.tar.gz \
+          -C artifacts/ \
+          release-binaries-arm64-v8a/arm64-v8a/ \
+          release-binaries-x86_64/x86_64/ 2>/dev/null || true
+        
+        # Generate checksums
+        cd release
+        sha256sum *.tar.gz > checksums.sha256
+        cd ..
+        
+        # List created packages
+        echo "Created release packages:"
+        ls -la release/
+    
+    - name: Upload packages to GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          release/*.tar.gz
+          release/checksums.sha256
+        body: |
+          ## AMMF3-Core Release ${{ github.ref_name }}
+          
+          ### 📦 Available Packages
+          - `ammf3-core-${{ github.ref_name }}-arm64-v8a.tar.gz` - ARM64 Android binaries
+          - `ammf3-core-${{ github.ref_name }}-x86_64.tar.gz` - x86_64 Android binaries
+          - `ammf3-core-${{ github.ref_name }}-all-architectures.tar.gz` - Combined package
+          - `checksums.sha256` - SHA256 checksums for verification
+          
+          ### 🔧 Build Information
+          - **Commit**: ${{ github.sha }}
+          - **Build Date**: ${{ github.run_started_at }}
+          - **Android NDK**: r27c
+          - **Min Android API**: 21
+          
+          ### 📋 Components
+          - Logger daemon and client
+          - File watcher service
+          - API headers and libraries
+          
+          ### ✅ Verification
+          Verify package integrity using:
+          ```bash
+          sha256sum -c checksums.sha256
+          ```
+        draft: false
+        prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Notification job for release completion
+  release-notification:
+    needs: create-release-packages
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: Release status summary
+      run: |
+        if [[ "${{ needs.create-release-packages.result }}" == "success" ]]; then
+          echo "🎉 Release ${{ github.ref_name }} has been successfully built and published!"
+          echo "📦 Release packages are now available at: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }}"
+        else
+          echo "❌ Release build failed for ${{ github.ref_name }}"
+          exit 1
+        fi

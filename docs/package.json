@@ -1,0 +1,16 @@
+{
+  "name": "ammf3-core-docs",
+  "version": "1.0.0",
+  "description": "Documentation for AMMF3-Core project",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "deploy": "gh-pages -d .vitepress/dist"
+  },
+  "devDependencies": {
+    "vitepress": "^1.0.0",
+    "gh-pages": "^6.0.0"
+  }
+}
