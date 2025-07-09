@@ -1,22 +1,22 @@
-# FileWatcher API Reference
+# FileWatcherAPI参考 (FileWatcher API Reference)
 
-The FileWatcher API provides efficient, low-power file system monitoring capabilities for Android root environments. Built on Linux inotify, it offers real-time file change detection with customizable event handling.
+FileWatcherAPI为Android root环境提供高效、低功耗的文件系统监控功能。基于Linux inotify机制，提供实时文件变化检测和可定制的事件处理。
 
-## Overview
+## 📚 API概览
 
-The FileWatcher API enables applications to monitor file system changes with minimal CPU usage and power consumption. It supports:
+FileWatcherAPI使应用程序能够以最小的CPU使用率和功耗监控文件系统变化。主要特性：
 
-- **Real-time monitoring**: inotify-based event detection
-- **Custom callbacks**: User-defined event handlers
-- **Power efficiency**: Smart polling with sleep mechanisms
-- **Multiple watch points**: Monitor multiple files/directories simultaneously
-- **Event filtering**: Configurable event types
+- **实时监控**: 基于inotify的事件检测
+- **自定义回调**: 用户定义的事件处理器
+- **节能高效**: 智能轮询和休眠机制
+- **多监控点**: 同时监控多个文件/目录
+- **事件过滤**: 可配置的事件类型
 
-## Core Classes
+## 🔧 核心类详解
 
-### FileWatcher
+### FileWatcher类
 
-The main class for file system monitoring.
+主要的文件系统监控类。
 
 ```cpp
 class FileWatcher {
@@ -32,46 +32,46 @@ public:
 };
 ```
 
-## Event Types
+## 📋 事件类型
 
-### EventType Enum
+### EventType枚举
 
 ```cpp
 enum class EventType {
-    MODIFY = IN_MODIFY,    // File was modified
-    CREATE = IN_CREATE,    // File/directory was created
-    DELETE = IN_DELETE,    // File/directory was deleted
-    MOVE   = IN_MOVE,      // File/directory was moved
-    ATTRIB = IN_ATTRIB,    // Metadata changed (permissions, timestamps, etc.)
-    ACCESS = IN_ACCESS     // File was accessed (read)
+    MODIFY = IN_MODIFY,    // 文件被修改
+    CREATE = IN_CREATE,    // 文件/目录被创建
+    DELETE = IN_DELETE,    // 文件/目录被删除
+    MOVE   = IN_MOVE,      // 文件/目录被移动
+    ATTRIB = IN_ATTRIB,    // 元数据变化（权限、时间戳等）
+    ACCESS = IN_ACCESS     // 文件被访问（读取）
 };
 ```
 
-### Event Descriptions
+### 事件类型说明
 
-| Event Type | Description | Use Cases |
-|------------|-------------|----------|
-| `MODIFY` | File content changed | Configuration file updates, log file changes |
-| `CREATE` | New file/directory created | New file detection, directory monitoring |
-| `DELETE` | File/directory deleted | Cleanup detection, file removal monitoring |
-| `MOVE` | File/directory moved/renamed | File organization tracking |
-| `ATTRIB` | Metadata changed | Permission changes, timestamp updates |
-| `ACCESS` | File accessed (read) | Usage tracking, security monitoring |
+| 事件类型 | 描述 | 使用场景 |
+|---------|------|----------|
+| `MODIFY` | 文件内容变化 | 配置文件更新、日志文件变化 |
+| `CREATE` | 新文件/目录创建 | 新文件检测、目录监控 |
+| `DELETE` | 文件/目录删除 | 清理检测、文件移除监控 |
+| `MOVE` | 文件/目录移动/重命名 | 文件组织跟踪 |
+| `ATTRIB` | 元数据变化 | 权限变更、时间戳更新 |
+| `ACCESS` | 文件访问（读取） | 使用跟踪、安全监控 |
 
-## Event Structure
+## 📊 事件结构
 
-### FileEvent
+### FileEvent结构体
 
 ```cpp
 struct FileEvent {
-    std::string path;        // Path being watched
-    std::string filename;    // Name of the affected file (empty for directory events)
-    EventType type;          // Type of event that occurred
-    uint32_t mask;          // Raw inotify event mask
+    std::string path;        // 被监控的路径
+    std::string filename;    // 受影响的文件名（目录事件时为空）
+    EventType type;          // 发生的事件类型
+    uint32_t mask;          // 原始inotify事件掩码
 };
 ```
 
-**Example Event:**
+**事件示例:**
 ```cpp
 FileEvent {
     path = "/data/config",
@@ -81,24 +81,24 @@ FileEvent {
 }
 ```
 
-## Callback Functions
+## 🔄 回调函数
 
-### EventCallback Type
+### EventCallback类型
 
 ```cpp
 using EventCallback = std::function<void(const FileEvent&)>;
 ```
 
-**Example Callback:**
+**回调示例:**
 ```cpp
 auto callback = [](const FileWatcherAPI::FileEvent& event) {
-    std::cout << "File " << event.filename 
-              << " was " << FileWatcherAPI::event_type_to_string(event.type)
-              << " in " << event.path << std::endl;
+    std::cout << "文件 " << event.filename 
+              << " 在 " << event.path << " 中被" 
+              << FileWatcherAPI::event_type_to_string(event.type) << std::endl;
 };
 ```
 
-## Constructor and Destructor
+## 🏗️ 构造函数和析构函数
 
 ### FileWatcher()
 
@@ -106,9 +106,9 @@ auto callback = [](const FileWatcherAPI::FileEvent& event) {
 FileWatcher();
 ```
 
-Creates a new FileWatcher instance and initializes the inotify file descriptor.
+创建新的FileWatcher实例并初始化inotify文件描述符。
 
-**Example:**
+**示例:**
 ```cpp
 FileWatcherAPI::FileWatcher watcher;
 ```
@@ -119,9 +119,9 @@ FileWatcherAPI::FileWatcher watcher;
 ~FileWatcher();
 ```
 
-Automatically stops monitoring and cleans up resources.
+自动停止监控并清理资源。
 
-## Core Methods
+## 🔧 核心方法
 
 ### add_watch()
 
@@ -130,29 +130,29 @@ bool add_watch(const std::string& path, EventCallback callback,
                uint32_t events = IN_MODIFY | IN_CREATE | IN_DELETE);
 ```
 
-Adds a watch point for the specified path.
+为指定路径添加监控点。
 
-**Parameters:**
-- `path`: File or directory path to monitor
-- `callback`: Function to call when events occur
-- `events`: Bitmask of events to monitor (optional)
+**参数:**
+- `path`: 要监控的文件或目录路径
+- `callback`: 事件发生时调用的函数
+- `events`: 要监控的事件位掩码（可选）
 
-**Returns:**
-- `true`: Watch added successfully
-- `false`: Failed to add watch (path doesn't exist, permission denied, etc.)
+**返回值:**
+- `true`: 监控添加成功
+- `false`: 添加监控失败（路径不存在、权限被拒绝等）
 
-**Example:**
+**示例:**
 ```cpp
-// Watch for file modifications
+// 监控文件修改
 bool success = watcher.add_watch("/data/config/app.conf", 
     [](const FileWatcherAPI::FileEvent& event) {
-        std::cout << "Config file changed!" << std::endl;
+        std::cout << "配置文件已更改!" << std::endl;
     },
     static_cast<uint32_t>(FileWatcherAPI::EventType::MODIFY)
 );
 
 if (!success) {
-    std::cerr << "Failed to add watch" << std::endl;
+    std::cerr << "添加监控失败" << std::endl;
 }
 ```
 
@@ -162,12 +162,12 @@ if (!success) {
 void start();
 ```
 
-Starts the file monitoring in a background thread. Safe to call multiple times.
+在后台线程中启动文件监控。可以安全地多次调用。
 
-**Example:**
+**示例:**
 ```cpp
 watcher.start();
-std::cout << "File monitoring started" << std::endl;
+std::cout << "文件监控已启动" << std::endl;
 ```
 
 ### stop()
@@ -176,12 +176,12 @@ std::cout << "File monitoring started" << std::endl;
 void stop();
 ```
 
-Stops file monitoring and waits for the background thread to finish. Safe to call multiple times.
+停止文件监控并等待后台线程完成。可以安全地多次调用。
 
-**Example:**
+**示例:**
 ```cpp
 watcher.stop();
-std::cout << "File monitoring stopped" << std::endl;
+std::cout << "文件监控已停止" << std::endl;
 ```
 
 ### is_running()
@@ -190,22 +190,22 @@ std::cout << "File monitoring stopped" << std::endl;
 bool is_running() const;
 ```
 
-Checks if the file watcher is currently running.
+检查文件监控器是否正在运行。
 
-**Returns:**
-- `true`: Watcher is active
-- `false`: Watcher is stopped
+**返回值:**
+- `true`: 监控器处于活动状态
+- `false`: 监控器已停止
 
-**Example:**
+**示例:**
 ```cpp
 if (watcher.is_running()) {
-    std::cout << "Watcher is active" << std::endl;
+    std::cout << "监控器处于活动状态" << std::endl;
 } else {
-    std::cout << "Watcher is stopped" << std::endl;
+    std::cout << "监控器已停止" << std::endl;
 }
 ```
 
-## Utility Functions
+## 🛠️ 工具函数
 
 ### make_event_mask()
 
@@ -213,15 +213,15 @@ if (watcher.is_running()) {
 uint32_t make_event_mask(std::initializer_list<EventType> events);
 ```
 
-Creates an event mask from a list of event types.
+从事件类型列表创建事件掩码。
 
-**Parameters:**
-- `events`: List of EventType values
+**参数:**
+- `events`: EventType值的列表
 
-**Returns:**
-- Combined event mask for use with `add_watch()`
+**返回值:**
+- 用于`add_watch()`的组合事件掩码
 
-**Example:**
+**示例:**
 ```cpp
 auto mask = FileWatcherAPI::make_event_mask({
     FileWatcherAPI::EventType::CREATE,
@@ -238,23 +238,23 @@ watcher.add_watch("/data/logs", callback, mask);
 std::string event_type_to_string(EventType type);
 ```
 
-Converts an EventType to its string representation.
+将EventType转换为其字符串表示。
 
-**Parameters:**
-- `type`: EventType to convert
+**参数:**
+- `type`: 要转换的EventType
 
-**Returns:**
-- String representation of the event type
+**返回值:**
+- 事件类型的字符串表示
 
-**Example:**
+**示例:**
 ```cpp
 std::string event_name = FileWatcherAPI::event_type_to_string(FileWatcherAPI::EventType::MODIFY);
 // event_name = "MODIFY"
 ```
 
-## Usage Patterns
+## 🚀 使用模式
 
-### Basic File Monitoring
+### 基本文件监控
 
 ```cpp
 #include "filewatcherAPI/filewatcher_api.hpp"
@@ -263,12 +263,12 @@ std::string event_name = FileWatcherAPI::event_type_to_string(FileWatcherAPI::Ev
 int main() {
     FileWatcherAPI::FileWatcher watcher;
     
-    // Monitor a configuration file
+    // 监控配置文件
     watcher.add_watch("/data/config/app.conf", 
         [](const FileWatcherAPI::FileEvent& event) {
             if (event.type == FileWatcherAPI::EventType::MODIFY) {
-                std::cout << "Configuration file updated!" << std::endl;
-                // Reload configuration
+                std::cout << "配置文件已更新!" << std::endl;
+                // 重新加载配置
             }
         },
         static_cast<uint32_t>(FileWatcherAPI::EventType::MODIFY)
@@ -276,8 +276,8 @@ int main() {
     
     watcher.start();
     
-    // Keep the application running
-    std::cout << "Press Enter to stop monitoring..." << std::endl;
+    // 保持应用程序运行
+    std::cout << "按Enter键停止监控..." << std::endl;
     std::cin.get();
     
     watcher.stop();
@@ -285,7 +285,7 @@ int main() {
 }
 ```
 
-### Directory Monitoring
+### 目录监控
 
 ```cpp
 #include "filewatcherAPI/filewatcher_api.hpp"
@@ -297,7 +297,7 @@ private:
     
 public:
     void startMonitoring(const std::string& directory) {
-        // Monitor all file operations in directory
+        // 监控目录中的所有文件操作
         auto events = FileWatcherAPI::make_event_mask({
             FileWatcherAPI::EventType::CREATE,
             FileWatcherAPI::EventType::DELETE,
@@ -311,12 +311,12 @@ public:
             }, events);
         
         watcher_.start();
-        std::cout << "Monitoring directory: " << directory << std::endl;
+        std::cout << "正在监控目录: " << directory << std::endl;
     }
     
     void stopMonitoring() {
         watcher_.stop();
-        std::cout << "Directory monitoring stopped" << std::endl;
+        std::cout << "目录监控已停止" << std::endl;
     }
     
 private:
@@ -324,15 +324,14 @@ private:
         std::string action = FileWatcherAPI::event_type_to_string(event.type);
         
         if (!event.filename.empty()) {
-            std::cout << "File " << event.filename 
-                      << " was " << action 
-                      << " in " << event.path << std::endl;
+            std::cout << "文件 " << event.filename 
+                      << " 在 " << event.path << " 中被" << action << std::endl;
         } else {
-            std::cout << "Directory event: " << action 
-                      << " in " << event.path << std::endl;
+            std::cout << "目录事件: " << action 
+                      << " 在 " << event.path << std::endl;
         }
         
-        // Handle specific events
+        // 处理特定事件
         switch (event.type) {
             case FileWatcherAPI::EventType::CREATE:
                 onFileCreated(event.path + "/" + event.filename);
@@ -349,20 +348,20 @@ private:
     }
     
     void onFileCreated(const std::string& filepath) {
-        std::cout << "New file detected: " << filepath << std::endl;
+        std::cout << "检测到新文件: " << filepath << std::endl;
     }
     
     void onFileDeleted(const std::string& filepath) {
-        std::cout << "File removed: " << filepath << std::endl;
+        std::cout << "文件已删除: " << filepath << std::endl;
     }
     
     void onFileModified(const std::string& filepath) {
-        std::cout << "File updated: " << filepath << std::endl;
+        std::cout << "文件已更新: " << filepath << std::endl;
     }
 };
 ```
 
-### Multiple Watch Points
+### 多监控点
 
 ```cpp
 #include "filewatcherAPI/filewatcher_api.hpp"
@@ -375,10 +374,10 @@ private:
     
 public:
     void setupWatches() {
-        // Watch configuration files
+        // 监控配置文件
         watcher_.add_watch("/data/config", 
             [](const FileWatcherAPI::FileEvent& event) {
-                std::cout << "[CONFIG] " << event.filename 
+                std::cout << "[配置] " << event.filename 
                           << " " << FileWatcherAPI::event_type_to_string(event.type) 
                           << std::endl;
             },
@@ -388,21 +387,21 @@ public:
             })
         );
         
-        // Watch log directory
+        // 监控日志目录
         watcher_.add_watch("/data/logs", 
             [](const FileWatcherAPI::FileEvent& event) {
-                std::cout << "[LOGS] " << event.filename 
+                std::cout << "[日志] " << event.filename 
                           << " " << FileWatcherAPI::event_type_to_string(event.type) 
                           << std::endl;
             },
             static_cast<uint32_t>(FileWatcherAPI::EventType::CREATE)
         );
         
-        // Watch specific important file
+        // 监控特定重要文件
         watcher_.add_watch("/data/important.dat", 
             [](const FileWatcherAPI::FileEvent& event) {
-                std::cout << "[CRITICAL] Important file was modified!" << std::endl;
-                // Take immediate action
+                std::cout << "[关键] 重要文件已被修改!" << std::endl;
+                // 立即采取行动
             },
             static_cast<uint32_t>(FileWatcherAPI::EventType::MODIFY)
         );
@@ -416,69 +415,69 @@ public:
 };
 ```
 
-## Performance Considerations
+## 📊 性能考虑
 
-### Power Efficiency
+### 节能效率
 
-The FileWatcher is designed for minimal power consumption:
+FileWatcher专为最小功耗设计：
 
-- **Event-driven**: Only activates when file system events occur
-- **Smart polling**: Uses 1-second timeout with 100ms sleep for power saving
-- **Efficient I/O**: Non-blocking inotify operations
+- **事件驱动**: 仅在文件系统事件发生时激活
+- **智能轮询**: 使用1秒超时和100毫秒休眠来节省电力
+- **高效I/O**: 非阻塞inotify操作
 
-### Memory Usage
+### 内存使用
 
-- **Minimal overhead**: Small memory footprint per watch point
-- **Efficient buffering**: 4KB event buffer for batch processing
-- **Automatic cleanup**: Resources freed when watcher is destroyed
+- **最小开销**: 每个监控点的内存占用很小
+- **高效缓冲**: 4KB事件缓冲区用于批处理
+- **自动清理**: 监控器销毁时释放资源
 
-### CPU Usage
+### CPU使用
 
-- **Low CPU impact**: inotify-based monitoring is very efficient
-- **Background processing**: Events processed in separate thread
-- **Optimized polling**: Minimal CPU usage during idle periods
+- **低CPU影响**: 基于inotify的监控非常高效
+- **后台处理**: 事件在单独线程中处理
+- **优化轮询**: 空闲期间CPU使用率极低
 
-## Error Handling
+## 🛠️ 错误处理
 
-The FileWatcher handles various error conditions gracefully:
+FileWatcher优雅地处理各种错误条件：
 
-### Common Errors
+### 常见错误
 
-1. **Path doesn't exist**: `add_watch()` returns `false`
-2. **Permission denied**: `add_watch()` returns `false`
-3. **Too many watches**: System limit reached, `add_watch()` returns `false`
-4. **inotify initialization failed**: Constructor handles gracefully
+1. **路径不存在**: `add_watch()`返回`false`
+2. **权限被拒绝**: `add_watch()`返回`false`
+3. **监控点过多**: 达到系统限制，`add_watch()`返回`false`
+4. **inotify初始化失败**: 构造函数优雅处理
 
-### Best Practices
+### 最佳实践
 
 ```cpp
-// Always check return value of add_watch()
+// 始终检查add_watch()的返回值
 if (!watcher.add_watch(path, callback)) {
-    std::cerr << "Failed to add watch for: " << path << std::endl;
-    // Handle error appropriately
+    std::cerr << "添加监控失败: " << path << std::endl;
+    // 适当处理错误
 }
 
-// Ensure proper cleanup
+// 确保正确清理
 class SafeWatcher {
     FileWatcherAPI::FileWatcher watcher_;
 public:
     ~SafeWatcher() {
-        watcher_.stop();  // Automatic cleanup
+        watcher_.stop();  // 自动清理
     }
 };
 ```
 
-## Thread Safety
+## 🔒 线程安全
 
-The FileWatcher API is designed with thread safety in mind:
+FileWatcher API在设计时考虑了线程安全：
 
-- **Thread-safe operations**: `start()`, `stop()`, and `add_watch()` are thread-safe
-- **Callback execution**: Callbacks are executed in the watcher's background thread
-- **Concurrent access**: Multiple threads can safely interact with the same watcher instance
+- **线程安全操作**: `start()`、`stop()`和`add_watch()`都是线程安全的
+- **回调执行**: 回调在监控器的后台线程中执行
+- **并发访问**: 多个线程可以安全地与同一个监控器实例交互
 
-**Important Note**: Callbacks should be thread-safe if they access shared data.
+**重要提示**: 如果回调访问共享数据，回调本身应该是线程安全的。
 
-## Integration with Logger API
+## 🔗 与LoggerAPI集成
 
 ```cpp
 #include "filewatcherAPI/filewatcher_api.hpp"
@@ -490,12 +489,12 @@ private:
     
 public:
     MonitoredApplication() {
-        // Initialize logger
+        // 初始化日志器
         LoggerAPI::InternalLogger::Config config;
         config.log_path = "monitor.log";
         LoggerAPI::init_logger(config);
         
-        // Setup file monitoring with logging
+        // 设置带日志记录的文件监控
         setupFileMonitoring();
     }
     
@@ -503,9 +502,9 @@ private:
     void setupFileMonitoring() {
         watcher_.add_watch("/data/config", 
             [](const FileWatcherAPI::FileEvent& event) {
-                std::string message = "File event: " + 
+                std::string message = "文件事件: " + 
                     FileWatcherAPI::event_type_to_string(event.type) + 
-                    " on " + event.path;
+                    " 在 " + event.path;
                 
                 if (!event.filename.empty()) {
                     message += "/" + event.filename;
@@ -521,29 +520,31 @@ private:
         );
         
         watcher_.start();
-        LoggerAPI::info("File monitoring started");
+        LoggerAPI::info("文件监控已启动");
     }
     
 public:
     ~MonitoredApplication() {
         watcher_.stop();
-        LoggerAPI::info("File monitoring stopped");
+        LoggerAPI::info("文件监控已停止");
         LoggerAPI::shutdown_logger();
     }
 };
 ```
 
-## Limitations
+## ⚠️ 限制说明
 
-1. **Linux/Android only**: Uses Linux inotify, not portable to other platforms
-2. **Root permissions**: May require root access for certain system directories
-3. **Watch limits**: System-imposed limits on number of inotify watches
-4. **Recursive monitoring**: Doesn't automatically watch subdirectories (must add each directory separately)
-5. **Network filesystems**: May not work reliably with network-mounted filesystems
+1. **仅限Linux/Android**: 使用Linux inotify，不可移植到其他平台
+2. **Root权限**: 某些系统目录可能需要root访问权限
+3. **监控限制**: 系统对inotify监控数量有限制
+4. **递归监控**: 不会自动监控子目录（必须单独添加每个目录）
+5. **网络文件系统**: 在网络挂载的文件系统上可能无法可靠工作
 
-## See Also
+## 🔗 相关文档
 
-- [Logger API](/api/logger-api) - Logging capabilities
-- [Command Line Tools](/api/cli-tools) - External file watcher tool
-- [Examples](/examples/basic-usage) - Complete usage examples
-- [Performance Guide](/guide/performance) - Optimization tips
+- [LoggerAPI参考](/api/logger-api) - 日志记录功能
+- [CLI工具参考](/api/cli-tools) - 命令行文件监控工具
+- [系统工具指南](/guide/system-tools) - 系统工具使用指南
+- [开发API指南](/guide/development-api) - API开发和集成指南
+- [基础使用示例](/examples/basic-usage) - 完整使用示例
+- [性能优化指南](/guide/performance) - 优化技巧

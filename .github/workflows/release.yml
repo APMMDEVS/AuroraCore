@@ -1,12 +1,13 @@
-name: Release Build
+name: System Tools Release
 
 # Trigger only on release creation (tag push)
+# This workflow builds and releases the binary system tools
 on:
   release:
     types: [ created ]
 
 jobs:
-  build-release:
+  build-system-tools:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -49,33 +50,82 @@ jobs:
     - name: Build optimized release
       run: cmake --build build --parallel --config Release
     
-    - name: Package release binaries
+    - name: Package system tools
       run: |
-        mkdir -p artifacts/${{ matrix.arch }}
+        mkdir -p artifacts/${{ matrix.arch }}/bin
+        mkdir -p artifacts/${{ matrix.arch }}/docs
         
-        # Copy binaries with error handling
-        cp build/src/logger/logger_daemon artifacts/${{ matrix.arch }}/ 2>/dev/null || echo "logger_daemon not found"
-        cp build/src/logger/logger_client artifacts/${{ matrix.arch }}/ 2>/dev/null || echo "logger_client not found"
-        cp build/src/filewatcher/filewatcher artifacts/${{ matrix.arch }}/ 2>/dev/null || echo "filewatcher not found"
+        # Copy system tool binaries
+        cp build/src/logger/logger_daemon artifacts/${{ matrix.arch }}/bin/ 2>/dev/null || echo "logger_daemon not found"
+        cp build/src/logger/logger_client artifacts/${{ matrix.arch }}/bin/ 2>/dev/null || echo "logger_client not found"
+        cp build/src/filewatcher/filewatcher artifacts/${{ matrix.arch }}/bin/ 2>/dev/null || echo "filewatcher not found"
         
         # Strip debug symbols for smaller binaries
-        find artifacts/${{ matrix.arch }}/ -type f -executable -exec strip {} \; 2>/dev/null || true
+        find artifacts/${{ matrix.arch }}/bin/ -type f -executable -exec strip {} \; 2>/dev/null || true
+        
+        # Create system tools documentation
+        cat > artifacts/${{ matrix.arch }}/README.md << 'EOF'
+        # AuroraCore System Tools ${{ github.ref_name }}
+        
+        ## 系统工具 (System Tools)
+        
+        本包包含AuroraCore的预编译二进制工具，可直接部署到Android设备使用。
+        
+        ### 包含的工具
+        
+        - **logger_daemon** - 日志守护进程
+        - **logger_client** - 日志客户端
+        - **filewatcher** - 文件监控工具
+        
+        ### 快速使用
+        
+        ```bash
+        # 部署到设备
+        adb push bin/* /data/local/tmp/
+        adb shell chmod +x /data/local/tmp/*
+        
+        # 启动日志服务
+        adb shell /data/local/tmp/logger_daemon -f /data/logs/app.log &
+        
+        # 发送日志
+        adb shell /data/local/tmp/logger_client "Hello AuroraCore!"
+        
+        # 监控文件
+        adb shell /data/local/tmp/filewatcher /data/config "echo File changed" &
+        ```
+        
+        ### 文档链接
+        
+        - [系统工具完整指南](https://github.com/APMMDEVS/AuroraCore/blob/main/docs/guide/system-tools.md)
+        - [开发API指南](https://github.com/APMMDEVS/AuroraCore/blob/main/docs/guide/development-api.md)
+        
+        EOF
         
         # Create version info file
-        echo "AuroraCore Release ${{ github.ref_name }}" > artifacts/${{ matrix.arch }}/VERSION
-        echo "Architecture: ${{ matrix.arch }}" >> artifacts/${{ matrix.arch }}/VERSION
-        echo "Build Date: $(date -u)" >> artifacts/${{ matrix.arch }}/VERSION
-        echo "Commit: ${{ github.sha }}" >> artifacts/${{ matrix.arch }}/VERSION
+        cat > artifacts/${{ matrix.arch }}/VERSION << EOF
+        AuroraCore System Tools Release ${{ github.ref_name }}
+        Architecture: ${{ matrix.arch }}
+        Build Date: $(date -u)
+        Commit: ${{ github.sha }}
+        
+        Components:
+        - Logger Daemon: High-performance logging service
+        - Logger Client: Command-line logging client
+        - File Watcher: Real-time file system monitoring
+        
+        For development APIs, please visit:
+        https://github.com/APMMDEVS/AuroraCore/tree/main/src
+        EOF
     
-    - name: Upload release artifacts
+    - name: Upload system tools artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: release-binaries-${{ matrix.arch }}
+        name: system-tools-${{ matrix.arch }}
         path: artifacts/
         retention-days: 30
 
-  create-release-packages:
-    needs: build-release
+  create-system-tools-packages:
+    needs: build-system-tools
     runs-on: ubuntu-latest
     
     steps:
@@ -84,29 +134,81 @@ jobs:
       with:
         path: artifacts/
     
-    - name: Create release packages
+    - name: Create system tools packages
       run: |
         mkdir -p release
         
-        # Create ARM64 release package
-        if [ -d "artifacts/release-binaries-arm64-v8a" ]; then
-          cd artifacts/release-binaries-arm64-v8a
-          tar -czf ../../release/AuroraCore-${{ github.ref_name }}-arm64-v8a.tar.gz arm64-v8a/
+        # Create ARM64 system tools package
+        if [ -d "artifacts/system-tools-arm64-v8a" ]; then
+          cd artifacts/system-tools-arm64-v8a
+          tar -czf ../../release/AuroraCore-SystemTools-${{ github.ref_name }}-arm64-v8a.tar.gz arm64-v8a/
           cd ../..
         fi
         
-        # Create x86_64 release package
-        if [ -d "artifacts/release-binaries-x86_64" ]; then
-          cd artifacts/release-binaries-x86_64
-          tar -czf ../../release/AuroraCore-${{ github.ref_name }}-x86_64.tar.gz x86_64/
+        # Create x86_64 system tools package
+        if [ -d "artifacts/system-tools-x86_64" ]; then
+          cd artifacts/system-tools-x86_64
+          tar -czf ../../release/AuroraCore-SystemTools-${{ github.ref_name }}-x86_64.tar.gz x86_64/
           cd ../..
         fi
         
         # Create combined package with both architectures
-        tar -czf release/AuroraCore-${{ github.ref_name }}-all-architectures.tar.gz \
+        tar -czf release/AuroraCore-SystemTools-${{ github.ref_name }}-all-architectures.tar.gz \
           -C artifacts/ \
-          release-binaries-arm64-v8a/arm64-v8a/ \
-          release-binaries-x86_64/x86_64/ 2>/dev/null || true
+          system-tools-arm64-v8a/arm64-v8a/ \
+          system-tools-x86_64/x86_64/ 2>/dev/null || true
+        
+        # Create API development package (header files only)
+        mkdir -p api-package/AuroraCore
+        cp -r ../src/loggerAPI api-package/AuroraCore/
+        cp -r ../src/filewatcherAPI api-package/AuroraCore/
+        cp ../CMakeLists.txt api-package/AuroraCore/
+        
+        # Create API documentation
+        cat > api-package/README.md << 'EOF'
+        # AuroraCore Development APIs ${{ github.ref_name }}
+        
+        ## 开发API (Development APIs)
+        
+        本包包含AuroraCore的C++头文件库，用于开发自定义应用程序。
+        
+        ### 包含的API
+        
+        - **LoggerAPI** (`loggerAPI/logger_api.hpp`) - 高性能日志记录库
+        - **FileWatcherAPI** (`filewatcherAPI/filewatcher_api.hpp`) - 文件系统监控库
+        
+        ### 快速集成
+        
+        ```cpp
+        #include "AuroraCore/loggerAPI/logger_api.hpp"
+        #include "AuroraCore/filewatcherAPI/filewatcher_api.hpp"
+        
+        int main() {
+            // 使用LoggerAPI
+            LoggerAPI::InternalLogger::Config config;
+            config.log_path = "/data/local/tmp/app.log";
+            LoggerAPI::InternalLogger logger(config);
+            logger.log(LoggerAPI::LogLevel::INFO, "Hello AuroraCore!");
+            
+            // 使用FileWatcherAPI
+            FileWatcherAPI::FileWatcher watcher;
+            watcher.add_watch("/data/config", [](const auto& event) {
+                std::cout << "File changed: " << event.filename << std::endl;
+            });
+            watcher.start();
+            
+            return 0;
+        }
+        ```
+        
+        ### 文档链接
+        
+        - [开发API完整指南](https://github.com/APMMDEVS/AuroraCore/blob/main/docs/guide/development-api.md)
+        - [API参考文档](https://github.com/APMMDEVS/AuroraCore/blob/main/docs/api/)
+        
+        EOF
+        
+        tar -czf release/AuroraCore-DevelopmentAPI-${{ github.ref_name }}.tar.gz -C api-package .
         
         # Generate checksums
         cd release
@@ -114,7 +216,7 @@ jobs:
         cd ..
         
         # List created packages
-        echo "Created release packages:"
+        echo "Created packages:"
         ls -la release/
     
     - name: Upload packages to GitHub Release
@@ -126,25 +228,59 @@ jobs:
         body: |
           ## AuroraCore Release ${{ github.ref_name }}
           
-          ### 📦 Available Packages
-          - `AuroraCore-${{ github.ref_name }}-arm64-v8a.tar.gz` - ARM64 Android binaries
-          - `AuroraCore-${{ github.ref_name }}-x86_64.tar.gz` - x86_64 Android binaries
-          - `AuroraCore-${{ github.ref_name }}-all-architectures.tar.gz` - Combined package
-          - `checksums.sha256` - SHA256 checksums for verification
+          ### 🔧 系统工具 (System Tools)
+          即用型二进制文件，直接部署到Android设备使用：
+          - `AuroraCore-SystemTools-${{ github.ref_name }}-arm64-v8a.tar.gz` - ARM64 Android二进制文件
+          - `AuroraCore-SystemTools-${{ github.ref_name }}-x86_64.tar.gz` - x86_64 Android二进制文件
+          - `AuroraCore-SystemTools-${{ github.ref_name }}-all-architectures.tar.gz` - 全架构合并包
           
-          ### 🔧 Build Information
-          - **Commit**: ${{ github.sha }}
-          - **Build Date**: ${{ github.run_started_at }}
+          ### 🛠️ 开发API (Development APIs)
+          C++头文件库，用于开发自定义应用程序：
+          - `AuroraCore-DevelopmentAPI-${{ github.ref_name }}.tar.gz` - 开发API头文件包
+          
+          ### 📋 包含组件
+          
+          **系统工具：**
+          - `logger_daemon` - 高性能日志守护进程
+          - `logger_client` - 命令行日志客户端
+          - `filewatcher` - 实时文件系统监控工具
+          
+          **开发API：**
+          - `LoggerAPI` - 日志记录C++库
+          - `FileWatcherAPI` - 文件监控C++库
+          
+          ### 🚀 快速开始
+          
+          **使用系统工具：**
+          ```bash
+          # 下载并部署
+          wget https://github.com/APMMDEVS/AuroraCore/releases/download/${{ github.ref_name }}/AuroraCore-SystemTools-${{ github.ref_name }}-arm64-v8a.tar.gz
+          tar -xzf AuroraCore-SystemTools-${{ github.ref_name }}-arm64-v8a.tar.gz
+          adb push arm64-v8a/bin/* /data/local/tmp/
+          adb shell chmod +x /data/local/tmp/*
+          ```
+          
+          **使用开发API：**
+          ```bash
+          # 下载API头文件
+          wget https://github.com/APMMDEVS/AuroraCore/releases/download/${{ github.ref_name }}/AuroraCore-DevelopmentAPI-${{ github.ref_name }}.tar.gz
+          tar -xzf AuroraCore-DevelopmentAPI-${{ github.ref_name }}.tar.gz
+          # 在项目中包含头文件
+          #include "AuroraCore/loggerAPI/logger_api.hpp"
+          ```
+          
+          ### 📖 文档
+          - [系统工具使用指南](https://github.com/APMMDEVS/AuroraCore/blob/main/docs/guide/system-tools.md)
+          - [开发API指南](https://github.com/APMMDEVS/AuroraCore/blob/main/docs/guide/development-api.md)
+          - [完整文档](https://github.com/APMMDEVS/AuroraCore/blob/main/docs/)
+          
+          ### 🔧 构建信息
+          - **提交**: ${{ github.sha }}
+          - **构建日期**: ${{ github.run_started_at }}
           - **Android NDK**: r27c
-          - **Min Android API**: 21
+          - **最低Android API**: 21
           
-          ### 📋 Components
-          - Logger daemon and client
-          - File watcher service
-          - API headers and libraries
-          
-          ### ✅ Verification
-          Verify package integrity using:
+          ### ✅ 完整性验证
           ```bash
           sha256sum -c checksums.sha256
           ```
@@ -155,16 +291,18 @@ jobs:
 
   # Notification job for release completion
   release-notification:
-    needs: create-release-packages
+    needs: create-system-tools-packages
     runs-on: ubuntu-latest
     if: always()
     
     steps:
     - name: Release status summary
       run: |
-        if [[ "${{ needs.create-release-packages.result }}" == "success" ]]; then
-          echo "🎉 Release ${{ github.ref_name }} has been successfully built and published!"
-          echo "📦 Release packages are now available at: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }}"
+        if [[ "${{ needs.create-system-tools-packages.result }}" == "success" ]]; then
+          echo "🎉 AuroraCore ${{ github.ref_name }} 系统工具和开发API已成功构建并发布！"
+          echo "📦 系统工具: 即用型二进制文件，可直接部署到Android设备"
+          echo "🛠️ 开发API: C++头文件库，用于开发自定义应用程序"
+          echo "📖 发布页面: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }}"
         else
           echo "❌ Release build failed for ${{ github.ref_name }}"
           exit 1

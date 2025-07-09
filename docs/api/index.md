@@ -1,150 +1,199 @@
-# API Reference
+# API参考文档 (API Reference)
 
-Comprehensive API documentation for AuroraCore components.
+AuroraCore提供两种使用方式：系统工具和开发API。本文档详细介绍各种API和工具的使用方法。
 
-## 📚 Available APIs
+## 🔧 系统工具 (System Tools)
 
-### Core Components
+预编译的二进制工具，可直接部署到Android设备使用：
 
-- **[Logger API](./logger-api)** - High-performance logging system
-  - Synchronous and asynchronous logging
-  - Multiple output formats and destinations
-  - Log rotation and compression
-  - Daemon mode for system-wide logging
+- **[CLI工具参考](./cli-tools)** - 命令行工具详细说明
+  - `logger_daemon` - 日志守护进程
+  - `logger_client` - 日志客户端
+  - `filewatcher` - 文件监控工具
+  - 命令行参数和配置选项
+  - 使用示例和最佳实践
 
-- **[FileWatcher API](./filewatcher-api)** - Real-time file system monitoring
-  - inotify-based file watching
-  - Recursive directory monitoring
-  - Event filtering and batching
-  - High-performance event processing
+## 🛠️ 开发API (Development APIs)
 
-- **[CLI Tools](./cli-tools)** - Command-line utilities
-  - Logger daemon management
-  - File monitoring tools
-  - Configuration utilities
-  - Performance testing tools
+C++头文件库，用于开发自定义应用程序：
 
-## 🚀 Quick Start
+- **[LoggerAPI](./logger-api)** - 高性能日志记录库
+  - 同步和异步日志记录
+  - 多种输出格式和目标
+  - 日志轮转和压缩
+  - 线程安全的日志操作
+  - 自定义日志格式
 
-### Basic Logger Usage
+- **[FileWatcherAPI](./filewatcher-api)** - 实时文件系统监控库
+  - 基于inotify的文件监控
+  - 递归目录监控
+  - 事件过滤和批处理
+  - 高性能事件处理
+  - 回调机制
+
+## 🚀 快速开始
+
+### 系统工具使用
+
+```bash
+# 部署系统工具
+adb push logger_daemon logger_client filewatcher /data/local/tmp/
+adb shell chmod +x /data/local/tmp/*
+
+# 启动日志服务
+adb shell /data/local/tmp/logger_daemon -f /data/logs/app.log &
+
+# 发送日志消息
+adb shell /data/local/tmp/logger_client "应用程序启动"
+adb shell /data/local/tmp/logger_client -l error "发生错误"
+
+# 监控文件变化
+adb shell /data/local/tmp/filewatcher /data/config "echo 配置文件已更改" &
+```
+
+### 开发API使用
 
 ```cpp
-#include "AuroraCore/logger_api.hpp"
+#include "loggerAPI/logger_api.hpp"
+#include "filewatcherAPI/filewatcher_api.hpp"
 
-// Initialize logger
-LoggerConfig config;
-config.log_dir = "/sdcard/logs";
+int main() {
+    // 初始化日志器
+    LoggerAPI::InternalLogger::Config config;
+    config.log_path = "/data/local/tmp/app.log";
+    config.max_file_size = 10 * 1024 * 1024;  // 10MB
+    
+    LoggerAPI::InternalLogger logger(config);
+    
+    // 记录日志
+    logger.log(LoggerAPI::LogLevel::INFO, "应用程序启动");
+    logger.log(LoggerAPI::LogLevel::ERROR, "发生错误");
+    
+    // 设置文件监控
+    FileWatcherAPI::FileWatcher watcher;
+    watcher.add_watch("/data/config", [](const auto& event) {
+        std::cout << "文件 " << event.filename << " 发生变化" << std::endl;
+    });
+    watcher.start();
+    
+    return 0;
+}
+```
+
+## 📖 组件分类
+
+### 系统工具组件
+
+| 工具 | 描述 | 使用场景 |
+|------|------|----------|
+| logger_daemon | 系统级日志守护进程 | 集中式日志收集 |
+| logger_client | 日志客户端工具 | 多进程日志记录 |
+| filewatcher | 文件监控工具 | 实时文件变化监控 |
+
+### 开发API组件
+
+| API | 描述 | 使用场景 |
+|-----|------|----------|
+| LoggerAPI::InternalLogger | 核心日志功能 | 应用程序内部日志 |
+| FileWatcherAPI::FileWatcher | 文件系统事件监控 | 实时文件跟踪 |
+| LoggerAPI全局函数 | 便捷的全局日志接口 | 简单日志记录 |
+
+### 内部组件
+
+| 组件 | 描述 | 使用场景 |
+|------|------|----------|
+| BufferManager | 内存缓冲区管理 | 高性能I/O |
+| FileManager | 文件操作和轮转 | 日志文件管理 |
+| IPCClient | 进程间通信 | 守护进程通信 |
+
+## 🔧 配置说明
+
+### 系统工具配置
+
+```bash
+# logger_daemon 配置参数
+./logger_daemon \
+  -f /data/logs/app.log \     # 日志文件路径
+  -s 10485760 \              # 最大文件大小(字节)
+  -n 5 \                     # 保留文件数量
+  -b 65536 \                 # 缓冲区大小(字节)
+  -p /data/logs/logger.sock \ # Unix socket路径
+  -t 1000                    # 刷新间隔(毫秒)
+
+# filewatcher 配置参数
+./filewatcher \
+  -r \                       # 递归监控
+  -d 3 \                     # 监控深度
+  -e create,modify \         # 事件类型
+  /data/config \             # 监控路径
+  "echo 文件变化: %f"         # 执行命令
+```
+
+### 开发API配置
+
+```cpp
+// LoggerAPI配置
+LoggerAPI::InternalLogger::Config config;
+config.log_path = "/data/local/tmp/app.log";
 config.max_file_size = 10 * 1024 * 1024;  // 10MB
+config.max_files = 5;
+config.min_log_level = LoggerAPI::LogLevel::INFO;
+config.buffer_size = 64 * 1024;           // 64KB
+config.flush_interval_ms = 1000;           // 1秒
+config.log_format = "{timestamp} [{level}] {message}";
 
-Logger logger(config);
-
-// Log messages
-logger.info("Application started");
-logger.error("Error occurred: {}", error_message);
-```
-
-### Basic FileWatcher Usage
-
-```cpp
-#include "AuroraCore/filewatcher_api.hpp"
-
-// Setup file watcher
-FileWatcherConfig config;
-config.recursive = true;
-config.events = FileEvent::CREATED | FileEvent::MODIFIED;
-
-FileWatcher watcher("/path/to/watch", config);
-
-// Set callback
-watcher.set_callback([](const FileEvent& event) {
-    std::cout << "File " << event.path << " was " << event.type << std::endl;
+// FileWatcherAPI配置
+uint32_t events = FileWatcherAPI::make_event_mask({
+    FileWatcherAPI::EventType::CREATE,
+    FileWatcherAPI::EventType::MODIFY,
+    FileWatcherAPI::EventType::DELETE
 });
-
-watcher.start();
 ```
 
-## 📖 API Categories
+## 📊 性能考虑
 
-### Logging APIs
+### 日志系统性能
 
-| Component | Description | Use Case |
-|-----------|-------------|----------|
-| Logger | Core logging functionality | Application logging |
-| LoggerDaemon | System-wide logging service | Centralized logging |
-| LoggerClient | Client for daemon communication | Multi-process logging |
+- **缓冲区大小**: 更大的缓冲区减少I/O频率
+- **异步模式**: 非阻塞日志记录提高性能
+- **日志级别过滤**: 减少不必要的日志输出
+- **守护进程模式**: 集中化日志处理开销
+- **批量刷新**: 定期批量写入磁盘
 
-### File Monitoring APIs
+### 文件监控性能
 
-| Component | Description | Use Case |
-|-----------|-------------|----------|
-| FileWatcher | File system event monitoring | Real-time file tracking |
-| WatcherCore | Low-level inotify wrapper | Custom monitoring solutions |
+- **事件过滤**: 减少不必要的事件处理
+- **监控深度限制**: 避免深层目录结构
+- **回调优化**: 在回调中使用异步处理
+- **inotify限制**: 注意系统级监控限制
+- **防抖动**: 避免短时间内重复处理
 
-### Utility APIs
+## 🔗 相关文档
 
-| Component | Description | Use Case |
-|-----------|-------------|----------|
-| BufferManager | Memory buffer management | High-performance I/O |
-| FileManager | File operations and rotation | Log file management |
-| IPCClient | Inter-process communication | Daemon communication |
+### 使用指南
+- [系统工具指南](/guide/system-tools) - 预编译工具的使用方法
+- [开发API指南](/guide/development-api) - API开发和集成指南
+- [性能优化](/guide/performance) - 性能调优建议
+- [构建指南](/guide/building) - 从源码构建
+- [FAQ](/guide/faq) - 常见问题解答
 
-## 🔧 Configuration
+### 示例代码
+- [基础使用示例](/examples/basic-usage) - 基本用法演示
+- [高级配置示例](/examples/advanced-config) - 高级配置选项
+- [集成示例](/examples/integration) - 项目集成案例
 
-### Logger Configuration
+## 📞 技术支持
 
-```cpp
-struct LoggerConfig {
-    std::string log_dir = "/tmp/logs";
-    size_t max_file_size = 10 * 1024 * 1024;
-    int max_files = 5;
-    LogLevel min_level = LogLevel::INFO;
-    bool async_mode = true;
-    size_t buffer_size = 1024 * 1024;
-    int flush_interval = 5000;
-};
-```
+针对API相关问题：
 
-### FileWatcher Configuration
+- 查看各组件的详细API文档
+- 查阅[FAQ](/guide/faq)了解常见问题
+- 浏览[示例代码](/examples/basic-usage)学习使用模式
+- 在[GitHub](https://github.com/APMMDEVS/AuroraCore/issues)提交问题
 
-```cpp
-struct FileWatcherConfig {
-    bool recursive = false;
-    int max_depth = -1;
-    FileEventMask events = FileEvent::ALL;
-    std::vector<std::string> exclude_patterns;
-    std::function<bool(const std::string&)> file_filter;
-};
-```
+### 获取帮助的最佳方式
 
-## 📊 Performance Considerations
-
-### Logger Performance
-
-- **Buffer Size**: Larger buffers reduce I/O frequency
-- **Async Mode**: Non-blocking logging for better performance
-- **Compression**: Reduces disk usage but increases CPU load
-- **Daemon Mode**: Centralizes logging overhead
-
-### FileWatcher Performance
-
-- **Event Filtering**: Reduce unnecessary events
-- **Batch Processing**: Handle multiple events together
-- **Recursive Limits**: Avoid deep directory structures
-- **inotify Limits**: System-level watch limits
-
-## 🔗 Related Documentation
-
-- [Getting Started Guide](/guide/getting-started)
-- [Performance Optimization](/guide/performance)
-- [Building from Source](/guide/building)
-- [FAQ](/guide/faq)
-- [Basic Usage Examples](/examples/basic-usage)
-
-## 📞 Support
-
-For API-specific questions:
-
-- Check the detailed API documentation for each component
-- Review the [FAQ](/guide/faq) for common issues
-- Browse [examples](/examples/basic-usage) for usage patterns
-- Submit issues on [GitHub](https://github.com/APMMDEVS/AuroraCore/issues)
+1. **系统工具问题**: 查看[系统工具指南](/guide/system-tools)
+2. **开发API问题**: 查看[开发API指南](/guide/development-api)
+3. **性能问题**: 查看[性能优化指南](/guide/performance)
+4. **构建问题**: 查看[构建指南](/guide/building)

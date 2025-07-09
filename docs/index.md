@@ -13,6 +13,9 @@ hero:
       text: Get Started
       link: /guide/getting-started
     - theme: alt
+      text: API Reference
+      link: /api/
+    - theme: alt
       text: View on GitHub
       link: https://github.com/APMMDEVS/AuroraCore
     - theme: alt
@@ -20,93 +23,30 @@ hero:
       link: /zh/
 
 features:
+  - icon: 🔧
+    title: System Tools
+    details: Ready-to-use binary files including logger_daemon, logger_client, and filewatcher. Deploy directly to Android devices without compilation. Perfect for system administrators and DevOps.
+    
+  - icon: 🛠️
+    title: Development APIs
+    details: Modern C++ header-only libraries providing LoggerAPI and FileWatcherAPI. Build custom applications and integrate into existing projects with ease.
+    
   - icon: ⚡
     title: High Performance & Power Efficient
     details: Optimized for Android root environment with intelligent buffering, batch I/O operations, and smart polling mechanisms to minimize CPU usage and power consumption.
     
   - icon: 📝
-    title: Advanced Logger System
-    details: Daemon-client architecture with automatic log rotation, configurable buffer sizes, and developer-friendly API. Supports multiple log levels and custom formatting.
+    title: Advanced Logging System
+    details: Daemon-client architecture with automatic log rotation, configurable buffer sizes, multiple log levels, and custom formatting support.
     
   - icon: 👁️
-    title: Intelligent File Watcher
-    details: inotify-based file monitoring with custom command execution, callback mechanisms, and power-saving design. Perfect for real-time file system monitoring.
-    
-  - icon: 🛠️
-    title: Developer-Friendly APIs
-    details: Modern C++20 header-only libraries with intuitive interfaces. Easy integration into existing Android applications and system services.
-    
-  - icon: 🔧
-    title: Flexible Configuration
-    details: Comprehensive configuration options for file sizes, rotation policies, buffer management, and monitoring events. Adaptable to various use cases.
+    title: Smart File Monitoring
+    details: inotify-based file monitoring with custom command execution, callback mechanisms, and power-efficient design for real-time filesystem monitoring.
     
   - icon: 📱
     title: Android Native
-    details: Built specifically for Android using NDK, with full support for ARM64 and ARMv7 architectures. Optimized for Android's unique constraints and requirements.
+    details: Built specifically for Android using NDK with full ARM64 and ARMv7 architecture support. Optimized for Android's unique constraints and requirements.
 ---
-
-## Quick Example
-
-### Logger API Usage
-
-```cpp
-#include "loggerAPI/logger_api.hpp"
-
-int main() {
-    // Configure logger
-    LoggerAPI::InternalLogger::Config config;
-    config.log_path = "app.log";
-    config.max_file_size = 10 * 1024 * 1024; // 10MB
-    config.min_log_level = LoggerAPI::LogLevel::DEBUG;
-    
-    LoggerAPI::init_logger(config);
-    
-    // Start logging
-    LoggerAPI::info("Application started");
-    LoggerAPI::debug("Debug information");
-    LoggerAPI::error("Error occurred");
-    
-    LoggerAPI::shutdown_logger();
-    return 0;
-}
-```
-
-### FileWatcher API Usage
-
-```cpp
-#include "filewatcherAPI/filewatcher_api.hpp"
-
-int main() {
-    FileWatcherAPI::FileWatcher watcher;
-    
-    // Add file watch with callback
-    watcher.add_watch("/data/config", 
-        [](const FileWatcherAPI::FileEvent& event) {
-            std::cout << "File " << event.filename 
-                      << " was " << FileWatcherAPI::event_type_to_string(event.type) 
-                      << std::endl;
-        },
-        FileWatcherAPI::make_event_mask({
-            FileWatcherAPI::EventType::MODIFY,
-            FileWatcherAPI::EventType::CREATE
-        })
-    );
-    
-    watcher.start();
-    // ... your application logic
-    watcher.stop();
-    
-    return 0;
-}
-```
-
-## Why AuroraCore?
-
-- **🎯 Purpose-Built**: Specifically designed for Android root environment constraints
-- **⚡ Performance**: Optimized for minimal CPU usage and power consumption
-- **🔒 Reliable**: Battle-tested daemon-client architecture with robust error handling
-- **📚 Well-Documented**: Comprehensive documentation with examples and best practices
-- **🚀 Easy Integration**: Header-only APIs for seamless integration into existing projects
 
 ## Getting Started
 
@@ -117,4 +57,3 @@ Ready to integrate AuroraCore into your Android project? Check out our [Getting 
 - 📖 [Documentation](/guide/introduction)
 - 🐛 [Issue Tracker](https://github.com/APMMDEVS/AuroraCore/issues)
 - 💬 [Discussions](https://github.com/APMMDEVS/AuroraCore/discussions)
-- 📧 [Contact Us](mailto:support@APMMDEVS.com)

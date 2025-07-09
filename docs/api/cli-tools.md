@@ -1,486 +1,471 @@
-# Command Line Tools Reference
+# CLI工具参考 (CLI Tools Reference)
 
-AuroraCore provides powerful command-line tools for system-wide logging and file monitoring. These tools are designed for Android root environments and offer high-performance, daemon-based logging solutions.
+AuroraCore提供三个核心命令行工具，可直接部署到Android设备使用。这些工具是预编译的二进制文件，无需额外依赖。
 
-## Overview
+## 📦 工具概览
 
-The command-line tools include:
+| 工具 | 功能 | 主要用途 |
+|------|------|----------|
+| `logger_daemon` | 日志守护进程 | 系统级日志收集和管理 |
+| `logger_client` | 日志客户端 | 向守护进程发送日志消息 |
+| `filewatcher` | 文件监控工具 | 实时监控文件系统变化 |
 
-- **logger_daemon**: High-performance logging daemon with automatic rotation
-- **logger_client**: Lightweight client for sending log messages to the daemon
-- **filewatcher**: Standalone file monitoring tool with custom command execution
+## 🔧 logger_daemon
 
-## logger_daemon
+系统级日志守护进程，提供集中式日志收集和管理功能。
 
-The logging daemon provides centralized, high-performance log management with automatic file rotation and intelligent buffering.
-
-### Synopsis
+### 基本语法
 
 ```bash
-logger_daemon [OPTIONS]
+logger_daemon [选项]
 ```
 
-### Options
+### 命令行参数
 
-| Option | Description | Default | Example |
-|--------|-------------|---------|----------|
-| `-f, --file <path>` | Log file path (required) | - | `-f /data/local/tmp/app.log` |
-| `-s, --size <bytes>` | Maximum file size in bytes | 10485760 (10MB) | `-s 5242880` (5MB) |
-| `-n, --number <count>` | Maximum number of log files | 5 | `-n 3` |
-| `-b, --buffer <bytes>` | Buffer size in bytes | 65536 (64KB) | `-b 131072` (128KB) |
-| `-p, --socket <path>` | Unix socket path | `/tmp/logger_daemon` | `-p /data/local/tmp/logger.sock` |
-| `-d, --daemon` | Run as daemon (background) | false | `-d` |
-| `-v, --verbose` | Enable verbose output | false | `-v` |
-| `-h, --help` | Show help message | - | `-h` |
+| 参数 | 长参数 | 类型 | 默认值 | 描述 |
+|------|--------|------|--------|------|
+| `-f` | `--file` | string | `/tmp/app.log` | 日志文件路径 |
+| `-s` | `--size` | int | `10485760` | 最大文件大小(字节) |
+| `-n` | `--count` | int | `5` | 保留的日志文件数量 |
+| `-b` | `--buffer` | int | `65536` | 内存缓冲区大小(字节) |
+| `-p` | `--socket` | string | `/tmp/logger.sock` | Unix socket路径 |
+| `-t` | `--interval` | int | `1000` | 刷新间隔(毫秒) |
+| `-l` | `--level` | string | `info` | 最低日志级别 |
+| `-d` | `--daemon` | flag | `false` | 后台运行模式 |
+| `-h` | `--help` | flag | - | 显示帮助信息 |
+| `-v` | `--version` | flag | - | 显示版本信息 |
 
-### Basic Usage
+### 日志级别
 
-#### Start Basic Daemon
+| 级别 | 数值 | 描述 |
+|------|------|------|
+| `trace` | 0 | 详细跟踪信息 |
+| `debug` | 1 | 调试信息 |
+| `info` | 2 | 一般信息 |
+| `warn` | 3 | 警告信息 |
+| `error` | 4 | 错误信息 |
+| `fatal` | 5 | 致命错误 |
+
+### 使用示例
+
+#### 基本启动
 
 ```bash
-# Start daemon with default settings
-./logger_daemon -f /data/local/tmp/app.log
-```
+# 基本启动
+./logger_daemon -f /data/logs/app.log
 
-#### Start with Custom Configuration
-
-```bash
-# Start with custom file size and count
+# 后台运行，自定义配置
 ./logger_daemon \
-  -f /data/local/tmp/myapp.log \
-  -s 20971520 \
+  -f /data/logs/system.log \
+  -s 52428800 \
   -n 10 \
   -b 131072 \
-  -p /data/local/tmp/myapp.sock
-```
+  -t 500 \
+  -l debug \
+  -d
 
-#### Run as Background Daemon
-
-```bash
-# Start as background daemon
-./logger_daemon -d \
-  -f /data/local/tmp/service.log \
-  -s 50331648 \
-  -n 5
-```
-
-### Advanced Configuration
-
-#### High-Performance Setup
-
-```bash
-# Optimized for high-throughput logging
+# 使用自定义socket路径
 ./logger_daemon \
-  -f /data/local/tmp/highperf.log \
-  -s 104857600 \    # 100MB per file
-  -n 20 \           # Keep 20 files (2GB total)
-  -b 1048576 \      # 1MB buffer
-  -p /data/local/tmp/highperf.sock
+  -f /data/logs/app.log \
+  -p /data/logs/logger.sock
 ```
 
-#### Memory-Constrained Setup
+#### 高性能配置
 
 ```bash
-# Optimized for low memory usage
+# 高吞吐量配置
 ./logger_daemon \
-  -f /data/local/tmp/lowmem.log \
-  -s 1048576 \      # 1MB per file
-  -n 3 \            # Keep only 3 files
-  -b 16384 \        # 16KB buffer
-  -p /data/local/tmp/lowmem.sock
+  -f /data/logs/highperf.log \
+  -s 104857600 \    # 100MB文件
+  -n 20 \           # 保留20个文件(2GB总计)
+  -b 1048576 \      # 1MB缓冲区
+  -p /data/logs/highperf.sock
+
+# 内存受限配置
+./logger_daemon \
+  -f /data/logs/lowmem.log \
+  -s 1048576 \      # 1MB文件
+  -n 3 \            # 仅保留3个文件
+  -b 16384 \        # 16KB缓冲区
+  -p /data/logs/lowmem.sock
 ```
 
-### File Rotation
+### 文件轮转机制
 
-The daemon automatically rotates log files when they reach the specified size:
+守护进程会在文件达到指定大小时自动轮转：
 
 ```
-app.log         (current, active log file)
-app.log.1       (previous log file)
-app.log.2       (older log file)
-app.log.3       (oldest log file)
+app.log         (当前活动日志文件)
+app.log.1       (上一个日志文件)
+app.log.2       (更早的日志文件)
+app.log.3       (最早的日志文件)
 ```
 
-**Rotation Process:**
-1. When `app.log` reaches max size, it's renamed to `app.log.1`
-2. Previous `app.log.1` becomes `app.log.2`, etc.
-3. Files beyond the max count are deleted
-4. New `app.log` is created for current logging
+**轮转过程：**
+1. 当`app.log`达到最大大小时，重命名为`app.log.1`
+2. 之前的`app.log.1`变成`app.log.2`，以此类推
+3. 超出最大数量的文件被删除
+4. 创建新的`app.log`用于当前日志记录
 
-### Process Management
-
-#### Check if Daemon is Running
+### 进程管理
 
 ```bash
-# Check process
+# 检查守护进程是否运行
 ps aux | grep logger_daemon
-
-# Check socket
 ls -la /tmp/logger_daemon
-```
 
-#### Stop the Daemon
-
-```bash
-# Send SIGTERM for graceful shutdown
+# 停止守护进程
 killall logger_daemon
-
-# Or find PID and kill
 pkill -f logger_daemon
-```
 
-#### Restart the Daemon
-
-```bash
-# Stop existing daemon
+# 重启守护进程
 killall logger_daemon
 sleep 1
-
-# Start new daemon
-./logger_daemon -f /data/local/tmp/app.log -d
+./logger_daemon -f /data/logs/app.log -d
 ```
 
-## logger_client
+## 📝 logger_client
 
-Lightweight client for sending log messages to the daemon.
+日志客户端工具，用于向logger_daemon发送日志消息。
 
-### Synopsis
+### 基本语法
 
 ```bash
-logger_client [OPTIONS] <message>
-logger_client [OPTIONS] -m <message>
+logger_client [选项] <消息>
+logger_client [选项] -m <消息>
 ```
 
-### Options
+### 命令行参数
 
-| Option | Description | Default | Example |
-|--------|-------------|---------|----------|
-| `-m, --message <text>` | Log message to send | - | `-m "Application started"` |
-| `-p, --socket <path>` | Unix socket path | `/tmp/logger_daemon` | `-p /data/local/tmp/app.sock` |
-| `-t, --timeout <ms>` | Connection timeout in milliseconds | 5000 | `-t 10000` |
-| `-v, --verbose` | Enable verbose output | false | `-v` |
-| `-h, --help` | Show help message | - | `-h` |
+| 参数 | 长参数 | 类型 | 默认值 | 描述 |
+|------|--------|------|--------|------|
+| `-l` | `--level` | string | `info` | 日志级别 |
+| `-p` | `--socket` | string | `/tmp/logger.sock` | Unix socket路径 |
+| `-t` | `--tag` | string | `client` | 日志标签 |
+| `-f` | `--file` | string | - | 从文件读取消息 |
+| `-i` | `--interactive` | flag | `false` | 交互模式 |
+| `-m` | `--message` | string | - | 要发送的日志消息 |
+| `--timeout` | - | int | `5000` | 连接超时(毫秒) |
+| `-h` | `--help` | flag | - | 显示帮助信息 |
+| `-v` | `--version` | flag | - | 显示版本信息 |
 
-### Basic Usage
+### 使用示例
 
-#### Send Simple Message
+#### 基本用法
 
 ```bash
-# Send message (positional argument)
-./logger_client "Application started successfully"
+# 发送基本日志消息
+./logger_client "应用程序启动"
 
-# Send message (with flag)
-./logger_client -m "User login: admin"
+# 指定日志级别
+./logger_client -l error "发生错误: 连接失败"
+./logger_client -l warn "警告: 内存使用率过高"
+./logger_client -l debug "调试: 处理用户请求"
+
+# 使用自定义标签
+./logger_client -t "WebServer" "HTTP服务器启动完成"
+./logger_client -t "Database" -l error "数据库连接失败"
+
+# 使用自定义socket路径
+./logger_client -p /data/logs/logger.sock "自定义路径日志"
 ```
 
-#### Send to Custom Socket
+#### 高级用法
 
 ```bash
-# Send to specific daemon instance
-./logger_client \
-  -p /data/local/tmp/myapp.sock \
-  -m "Custom daemon message"
-```
+# 从文件读取日志内容
+./logger_client -f /tmp/error.log -l error
 
-#### Send with Timeout
+# 交互模式
+./logger_client -i
+# 进入交互模式后，可以连续输入日志消息
+# 输入 'quit' 或 'exit' 退出
 
-```bash
-# Send with custom timeout
-./logger_client \
-  -t 10000 \
-  -m "Message with 10 second timeout"
-```
-
-### Advanced Usage
-
-#### Scripted Logging
-
-```bash
+# 脚本化日志记录
 #!/bin/bash
-# log_script.sh
-
-LOG_SOCKET="/data/local/tmp/script.sock"
+LOG_SOCKET="/data/logs/script.sock"
 
 log_info() {
-    ./logger_client -p "$LOG_SOCKET" -m "[INFO] $1"
+    ./logger_client -p "$LOG_SOCKET" -l info "$1"
 }
 
 log_error() {
-    ./logger_client -p "$LOG_SOCKET" -m "[ERROR] $1"
+    ./logger_client -p "$LOG_SOCKET" -l error "$1"
 }
 
-# Usage
-log_info "Script started"
-log_error "Something went wrong"
-log_info "Script completed"
+# 使用
+log_info "脚本开始执行"
+log_error "发生了错误"
+log_info "脚本执行完成"
 ```
 
-#### Batch Logging
+#### 批量日志示例
 
 ```bash
-# Send multiple messages
-for i in {1..10}; do
-    ./logger_client "Processing item $i"
-    sleep 0.1
+# 批量发送日志
+for i in {1..100}; do
+    ./logger_client -t "Test" "测试消息 #$i"
 done
-```
 
-#### Conditional Logging
+# 监控脚本日志
+./logger_client -t "Monitor" "开始系统监控"
+ps aux | while read line; do
+    ./logger_client -t "Monitor" -l debug "进程: $line"
+done
+./logger_client -t "Monitor" "系统监控完成"
 
-```bash
-# Log based on conditions
+# 条件日志记录
 if [ $? -eq 0 ]; then
-    ./logger_client "Operation successful"
+    ./logger_client "操作成功"
 else
-    ./logger_client "Operation failed with code $?"
+    ./logger_client -l error "操作失败，错误代码: $?"
 fi
 ```
 
-### Error Handling
-
-The client handles various error conditions:
-
-#### Connection Errors
+### 错误处理
 
 ```bash
-# If daemon is not running
-$ ./logger_client "test message"
+# 连接错误
+$ ./logger_client "测试消息"
 Error: Failed to connect to daemon socket
 
-# Check daemon status
+# 检查守护进程状态
 $ ps aux | grep logger_daemon
-```
 
-#### Socket Permission Errors
-
-```bash
-# If socket has wrong permissions
-$ ./logger_client "test message"
+# 权限错误
+$ ./logger_client "测试消息"
 Error: Permission denied
 
-# Fix socket permissions
+# 修复socket权限
 $ chmod 666 /tmp/logger_daemon
-```
 
-#### Timeout Errors
-
-```bash
-# If daemon is unresponsive
-$ ./logger_client -t 1000 "test message"
+# 超时错误
+$ ./logger_client --timeout 1000 "测试消息"
 Error: Connection timeout after 1000ms
 ```
 
-## filewatcher
+## 👁️ filewatcher
 
-Standalone file monitoring tool with custom command execution.
+实时文件系统监控工具，基于inotify机制监控文件和目录变化。
 
-### Synopsis
+### 基本语法
 
 ```bash
-filewatcher <path> <command> [OPTIONS]
+filewatcher <监控路径> <执行命令> [选项]
 ```
 
-### Arguments
+### 参数说明
 
-| Argument | Description | Example |
-|----------|-------------|----------|
-| `<path>` | File or directory to watch | `/data/config` |
-| `<command>` | Command to execute on file events | `"echo 'File changed: %f'"` |
+| 参数 | 描述 | 示例 |
+|------|------|------|
+| `<监控路径>` | 要监控的文件或目录 | `/data/config` |
+| `<执行命令>` | 文件事件发生时执行的命令 | `"echo '文件变化: %f'"` |
 
-### Options
+### 命令行选项
 
-| Option | Description | Default | Example |
-|--------|-------------|---------|----------|
-| `-e, --events <mask>` | Event mask (comma-separated) | `modify,create,delete` | `-e modify,create` |
-| `-r, --recursive` | Watch subdirectories recursively | false | `-r` |
-| `-d, --daemon` | Run as daemon (background) | false | `-d` |
-| `-v, --verbose` | Enable verbose output | false | `-v` |
-| `-h, --help` | Show help message | - | `-h` |
+| 参数 | 长参数 | 类型 | 默认值 | 描述 |
+|------|--------|------|--------|------|
+| `-r` | `--recursive` | flag | `false` | 递归监控子目录 |
+| `-d` | `--depth` | int | `-1` | 最大监控深度(-1为无限制) |
+| `-e` | `--events` | string | `all` | 监控的事件类型 |
+| `-x` | `--exclude` | string | - | 排除的文件模式(正则表达式) |
+| `-i` | `--include` | string | - | 包含的文件模式(正则表达式) |
+| `-q` | `--quiet` | flag | `false` | 静默模式，不输出事件信息 |
+| `-v` | `--verbose` | flag | `false` | 详细输出模式 |
+| `-o` | `--output` | string | - | 输出文件路径 |
+| `--daemon` | - | flag | `false` | 后台运行模式 |
+| `-h` | `--help` | flag | - | 显示帮助信息 |
+| `--version` | - | flag | - | 显示版本信息 |
 
-### Event Types
+### 事件类型
 
-| Event | Description | Use Case |
-|-------|-------------|----------|
-| `modify` | File content changed | Configuration updates |
-| `create` | File/directory created | New file detection |
-| `delete` | File/directory deleted | Cleanup monitoring |
-| `move` | File/directory moved | File organization |
-| `attrib` | Attributes changed | Permission changes |
-| `access` | File accessed | Usage tracking |
+| 事件 | 描述 | 使用场景 |
+|------|------|----------|
+| `create` | 文件/目录创建 | 新文件检测 |
+| `modify` | 文件内容修改 | 配置更新 |
+| `delete` | 文件/目录删除 | 清理监控 |
+| `move` | 文件/目录移动或重命名 | 文件组织 |
+| `attrib` | 文件属性变化 | 权限变更 |
+| `access` | 文件访问 | 使用跟踪 |
+| `all` | 所有事件类型 | 全面监控 |
 
-### Command Placeholders
+### 命令变量
 
-The command string supports these placeholders:
+在执行命令中可以使用以下变量：
 
-| Placeholder | Description | Example |
-|-------------|-------------|----------|
-| `%f` | Full file path | `/data/config/app.conf` |
-| `%d` | Directory path | `/data/config` |
-| `%n` | File name only | `app.conf` |
-| `%e` | Event type | `modify` |
+| 变量 | 描述 | 示例 |
+|------|------|------|
+| `%f` | 完整文件路径 | `/data/config/app.conf` |
+| `%d` | 目录路径 | `/data/config` |
+| `%n` | 仅文件名 | `app.conf` |
+| `%e` | 事件类型 | `modify` |
+| `%t` | 时间戳 | `2024-01-01 12:00:00` |
 
-### Basic Usage
+### 使用示例
 
-#### Watch Single File
+#### 基本监控
 
 ```bash
-# Watch configuration file
-./filewatcher /data/config/app.conf "echo 'Config changed: %f'"
+# 基本文件监控
+./filewatcher /data/config "echo '配置文件变化: %f'"
+
+# 监控并执行命令
+./filewatcher /data/config "echo '配置文件变化: %f (事件: %e)'"
+
+# 递归监控目录
+./filewatcher -r /data/app "echo '应用文件变化: %f (事件: %e)'"
+
+# 监控特定事件类型
+./filewatcher -e create,modify /data/logs "echo '日志文件更新: %f'"
 ```
 
-#### Watch Directory
+#### 高级监控
 
 ```bash
-# Watch entire directory
-./filewatcher /data/logs "echo 'Log event: %e on %n'"
-```
+# 限制监控深度
+./filewatcher -r -d 2 /data/project "echo '项目文件变化: %f'"
 
-#### Custom Events
+# 使用文件过滤
+./filewatcher -r \
+  --include="\.(cpp|hpp|h)$" \
+  /data/src \
+  "echo 'C++源文件变化: %f'"
 
-```bash
-# Watch only for file creation
-./filewatcher \
-  /data/incoming \
-  "process_file.sh %f" \
-  -e create
-```
-
-### Advanced Usage
-
-#### Recursive Directory Monitoring
-
-```bash
-# Watch directory tree recursively
-./filewatcher \
+# 排除特定文件
+./filewatcher -r \
+  --exclude="\.(tmp|log|bak)$" \
   /data/project \
-  "echo 'Project file %e: %f'" \
-  -r -v
+  "echo '项目文件变化: %f'"
+
+# 静默模式，仅执行命令
+./filewatcher -q /data/config \
+  "./logger_client -t FileWatcher '配置文件变化: %f'"
+
+# 输出到文件
+./filewatcher -r -o /data/logs/filewatcher.log /data/app
+
+# 后台运行
+./filewatcher --daemon -r /data/critical \
+  "./logger_client -l warn '重要文件变化: %f (事件: %e)'"
 ```
 
-#### Background Monitoring
+#### 实际应用场景
 
 ```bash
-# Run as daemon
-./filewatcher \
-  /data/critical \
-  "alert_system.sh '%f was %e'" \
-  -d -e modify,delete
+# 监控配置文件变化并重启服务
+./filewatcher /etc/myapp/config.json \
+  "systemctl restart myapp && echo '服务已重启'"
+
+# 监控源码变化并自动编译
+./filewatcher -r \
+  --include="\.(cpp|hpp)$" \
+  /data/src \
+  "cd /data && make && echo '编译完成'"
+
+# 监控日志目录并清理旧文件
+./filewatcher -e create /data/logs \
+  "find /data/logs -name '*.log' -mtime +7 -delete"
+
+# 监控上传目录并处理文件
+./filewatcher -e create /data/uploads \
+  "./process_upload.sh '%f'"
+
+# 结合logger_client记录文件变化
+./filewatcher -r /data/important \
+  "./logger_client -t FileWatcher -l warn '重要文件变化: %f (事件: %e, 时间: %t)'"
 ```
 
-#### Complex Command Execution
+## 🔄 工具组合使用
 
-```bash
-# Execute complex shell commands
-./filewatcher \
-  /data/uploads \
-  "if [ '%e' = 'create' ]; then process_upload.sh '%f'; fi" \
-  -e create
-```
-
-#### Log File Monitoring
-
-```bash
-# Monitor log files and send alerts
-./filewatcher \
-  /var/log \
-  "./logger_client 'Log file %n was %e'" \
-  -e modify,create
-```
-
-### Integration Examples
-
-#### System Configuration Monitor
+### 完整监控方案
 
 ```bash
 #!/bin/bash
-# config_monitor.sh
+# complete_monitoring.sh
 
-# Start logger daemon
-./logger_daemon -f /data/local/tmp/config_monitor.log -d
-
-# Monitor system configuration
-./filewatcher \
-  /data/config \
-  "./logger_client 'Config change detected: %f (%e)'" \
-  -r -d
-
-echo "Configuration monitoring started"
-```
-
-#### Backup Trigger
-
-```bash
-# Trigger backup when important files change
-./filewatcher \
-  /data/important \
-  "backup_script.sh '%d' && ./logger_client 'Backup triggered by %f'" \
-  -e modify,create -r
-```
-
-#### Security Monitoring
-
-```bash
-# Monitor sensitive directories
-./filewatcher \
-  /data/secure \
-  "./logger_client 'SECURITY: %f was %e at $(date)'" \
-  -e create,delete,modify,attrib -v
-```
-
-## Integration Patterns
-
-### Pattern 1: Application Logging
-
-```bash
-# Start dedicated daemon for application
+# 1. 启动日志守护进程
 ./logger_daemon \
-  -f /data/local/tmp/myapp.log \
-  -s 10485760 \
-  -n 5 \
-  -p /data/local/tmp/myapp.sock \
-  -d
-
-# Application sends logs
-./logger_client -p /data/local/tmp/myapp.sock "App started"
-./logger_client -p /data/local/tmp/myapp.sock "Processing request"
-./logger_client -p /data/local/tmp/myapp.sock "App finished"
-```
-
-### Pattern 2: System Monitoring
-
-```bash
-# Start system logger
-./logger_daemon \
-  -f /data/local/tmp/system.log \
+  -f /data/logs/system.log \
   -s 52428800 \
   -n 10 \
-  -p /data/local/tmp/system.sock \
+  -b 131072 \
+  -p /data/logs/system.sock \
   -d
 
-# Monitor multiple directories
-./filewatcher \
-  /data/config \
-  "./logger_client -p /data/local/tmp/system.sock 'Config: %f %e'" \
-  -r -d
+echo "日志守护进程已启动"
 
-./filewatcher \
-  /data/critical \
-  "./logger_client -p /data/local/tmp/system.sock 'CRITICAL: %f %e'" \
-  -d
+# 2. 监控应用目录并记录变化
+./filewatcher -r /data/app \
+  "./logger_client -p /data/logs/system.sock -t FileWatcher '应用文件变化: %f (事件: %e)'" \
+  --daemon
+
+echo "应用目录监控已启动"
+
+# 3. 监控配置文件并重启服务
+./filewatcher /data/config/app.conf \
+  "./logger_client -p /data/logs/system.sock -t Config '配置文件更新，重启服务' && systemctl restart myapp" \
+  --daemon
+
+echo "配置文件监控已启动"
+
+# 4. 定期发送心跳日志
+(
+    while true; do
+        ./logger_client -p /data/logs/system.sock -t Heartbeat "系统运行正常"
+        sleep 300  # 每5分钟发送一次
+    done
+) &
+
+echo "心跳监控已启动"
+echo "完整监控系统部署完成"
 ```
 
-### Pattern 3: Service Management
+### 开发环境监控
+
+```bash
+#!/bin/bash
+# dev_monitoring.sh
+
+# 启动开发日志
+./logger_daemon \
+  -f /data/logs/dev.log \
+  -s 10485760 \
+  -n 5 \
+  -p /data/logs/dev.sock \
+  -l debug \
+  -d
+
+# 监控源码变化并自动构建
+./filewatcher -r \
+  --include="\.(cpp|hpp|h|cmake)$" \
+  /data/project \
+  "cd /data/project && make -j4 && ./logger_client -p /data/logs/dev.sock -t Build '构建完成: %f'" \
+  --daemon
+
+# 监控测试文件变化并运行测试
+./filewatcher \
+  --include="test_.*\.cpp$" \
+  /data/project/tests \
+  "cd /data/project && make test && ./logger_client -p /data/logs/dev.sock -t Test '测试完成: %f'" \
+  --daemon
+
+echo "开发环境监控已启动"
+```
+
+### 服务管理模式
 
 ```bash
 #!/bin/bash
 # service_manager.sh
 
 SERVICE_NAME="myservice"
-LOG_PATH="/data/local/tmp/${SERVICE_NAME}.log"
-SOCK_PATH="/data/local/tmp/${SERVICE_NAME}.sock"
+LOG_PATH="/data/logs/${SERVICE_NAME}.log"
+SOCK_PATH="/data/logs/${SERVICE_NAME}.sock"
 
 start_service() {
-    # Start logger daemon
+    echo "启动服务: $SERVICE_NAME"
+    
+    # 启动日志守护进程
     ./logger_daemon \
         -f "$LOG_PATH" \
         -s 20971520 \
@@ -488,140 +473,238 @@ start_service() {
         -p "$SOCK_PATH" \
         -d
     
-    # Log service start
-    ./logger_client -p "$SOCK_PATH" "Service $SERVICE_NAME started"
+    # 记录服务启动
+    ./logger_client -p "$SOCK_PATH" "服务 $SERVICE_NAME 已启动"
     
-    # Start file monitoring
+    # 启动文件监控
     ./filewatcher \
         "/data/config/${SERVICE_NAME}.conf" \
-        "./logger_client -p '$SOCK_PATH' 'Config reloaded'" \
-        -e modify -d
+        "./logger_client -p '$SOCK_PATH' '配置已重新加载'" \
+        -e modify --daemon
+    
+    echo "服务 $SERVICE_NAME 启动完成"
 }
 
 stop_service() {
-    ./logger_client -p "$SOCK_PATH" "Service $SERVICE_NAME stopping"
+    echo "停止服务: $SERVICE_NAME"
+    ./logger_client -p "$SOCK_PATH" "服务 $SERVICE_NAME 正在停止"
     killall logger_daemon
     killall filewatcher
+    echo "服务 $SERVICE_NAME 已停止"
+}
+
+status_service() {
+    if pgrep -f "logger_daemon.*$SERVICE_NAME" > /dev/null; then
+        echo "服务 $SERVICE_NAME 正在运行"
+        ps aux | grep -E "(logger_daemon|filewatcher).*$SERVICE_NAME"
+    else
+        echo "服务 $SERVICE_NAME 未运行"
+    fi
 }
 
 case "$1" in
     start) start_service ;;
     stop) stop_service ;;
-    *) echo "Usage: $0 {start|stop}" ;;
+    status) status_service ;;
+    restart) stop_service; sleep 2; start_service ;;
+    *) echo "用法: $0 {start|stop|status|restart}" ;;
 esac
 ```
 
-## Performance Tuning
+## 🚀 性能优化
 
-### High-Throughput Logging
+### 高吞吐量日志配置
 
 ```bash
-# Optimized for high message volume
+# 优化高消息量场景
 ./logger_daemon \
-  -f /data/local/tmp/highvolume.log \
-  -s 209715200 \    # 200MB files
-  -n 50 \           # Keep 50 files (10GB total)
-  -b 2097152 \      # 2MB buffer
-  -p /data/local/tmp/highvolume.sock
+  -f /data/logs/highvolume.log \
+  -s 209715200 \    # 200MB文件
+  -n 50 \           # 保留50个文件(10GB总计)
+  -b 2097152 \      # 2MB缓冲区
+  -t 5000 \         # 5秒刷新间隔
+  -p /data/logs/highvolume.sock
 ```
 
-### Low-Latency Logging
+### 低延迟日志配置
 
 ```bash
-# Optimized for low latency
+# 优化低延迟场景
 ./logger_daemon \
-  -f /data/local/tmp/lowlatency.log \
-  -s 10485760 \     # 10MB files
-  -n 5 \            # Keep 5 files
-  -b 32768 \        # 32KB buffer (smaller for faster flush)
-  -p /data/local/tmp/lowlatency.sock
+  -f /data/logs/lowlatency.log \
+  -s 10485760 \     # 10MB文件
+  -n 5 \            # 保留5个文件
+  -b 32768 \        # 32KB缓冲区(更快刷新)
+  -t 100 \          # 100毫秒刷新间隔
+  -p /data/logs/lowlatency.sock
 ```
 
-### Memory-Constrained Environment
+### 内存受限环境配置
 
 ```bash
-# Optimized for low memory usage
+# 优化低内存使用
 ./logger_daemon \
-  -f /data/local/tmp/lowmem.log \
-  -s 1048576 \      # 1MB files
-  -n 2 \            # Keep only 2 files
-  -b 8192 \         # 8KB buffer
-  -p /data/local/tmp/lowmem.sock
+  -f /data/logs/lowmem.log \
+  -s 1048576 \      # 1MB文件
+  -n 2 \            # 仅保留2个文件
+  -b 8192 \         # 8KB缓冲区
+  -t 2000 \         # 2秒刷新间隔
+  -p /data/logs/lowmem.sock
 ```
 
-## Troubleshooting
-
-### Common Issues
-
-#### Daemon Won't Start
+### 文件监控优化
 
 ```bash
-# Check if socket already exists
+# 减少不必要的事件
+./filewatcher -r \
+  -e modify,create \  # 仅监控修改和创建
+  -d 3 \              # 限制深度
+  --exclude="\.(tmp|swp|log)$" \  # 排除临时文件
+  /data/project \
+  "./logger_client '项目文件变化: %f'"
+```
+
+## 🛠️ 故障排除
+
+### 常见问题诊断
+
+#### 1. 守护进程无法启动
+
+```bash
+# 检查socket是否已存在
 ls -la /tmp/logger_daemon
 
-# Remove stale socket
+# 删除旧socket
 rm -f /tmp/logger_daemon
 
-# Check permissions
-ls -la /data/local/tmp/
+# 检查权限
+ls -la /data/logs/
 
-# Start with verbose output
-./logger_daemon -f /data/local/tmp/test.log -v
+# 使用详细输出启动
+./logger_daemon -f /data/logs/test.log -v
 ```
 
-#### Client Can't Connect
+#### 2. 客户端无法连接
 
 ```bash
-# Check if daemon is running
+# 检查守护进程是否运行
 ps aux | grep logger_daemon
 
-# Check socket permissions
+# 检查socket权限
 ls -la /tmp/logger_daemon
 
-# Test with verbose output
-./logger_client -v "test message"
+# 使用详细输出测试
+./logger_client -v "测试消息"
+
+# 检查socket路径是否匹配
+./logger_client -p /data/logs/logger.sock "测试消息"
 ```
 
-#### File Watcher Not Working
+#### 3. 文件监控不工作
 
 ```bash
-# Check if path exists
+# 检查路径是否存在
 ls -la /data/config
 
-# Test with verbose output
-./filewatcher /data/config "echo test" -v
+# 使用详细输出测试
+./filewatcher /data/config "echo 测试" -v
 
-# Check inotify limits
+# 检查inotify限制
 cat /proc/sys/fs/inotify/max_user_watches
+
+# 增加监控限制(需要root权限)
+echo 524288 > /proc/sys/fs/inotify/max_user_watches
 ```
 
-### Debug Mode
+#### 4. 日志文件过大
 
 ```bash
-# Run daemon in foreground with verbose output
-./logger_daemon -f /data/local/tmp/debug.log -v
+# 检查日志文件大小
+ls -lh /data/logs/
 
-# Run file watcher with verbose output
-./filewatcher /data/test "echo %f" -v
+# 手动清理旧日志
+find /data/logs -name "*.log.*" -mtime +7 -delete
 
-# Test client connection
-./logger_client -v "debug message"
+# 调整配置
+./logger_daemon -s 10485760 -n 5  # 10MB文件，保留5个
 ```
 
-## Best Practices
+### 调试技巧
 
-1. **Use absolute paths** for all file and socket paths
-2. **Set appropriate buffer sizes** based on your logging volume
-3. **Monitor disk space** when using large log files
-4. **Use daemon mode** for production deployments
-5. **Implement log rotation** monitoring to prevent disk full
-6. **Test socket permissions** in your deployment environment
-7. **Use meaningful log messages** with context information
-8. **Monitor daemon health** with process monitoring tools
+```bash
+# 使用详细模式
+./logger_daemon -v -f /data/logs/debug.log
+./filewatcher -v /path/to/watch "echo 测试"
+./logger_client -v "调试消息"
 
-## See Also
+# 检查系统资源
+df -h /data/logs          # 磁盘空间
+free -h                   # 内存使用
+ps aux | grep logger      # 进程状态
 
-- [Logger API](/api/logger-api) - Programmatic logging interface
-- [FileWatcher API](/api/filewatcher-api) - Programmatic file monitoring
-- [Examples](/examples/basic-usage) - Complete integration examples
-- [Performance Guide](/guide/performance) - Optimization strategies
+# 测试连接
+./logger_client "测试连接" && echo "连接正常" || echo "连接失败"
+
+# 监控日志文件
+tail -f /data/logs/app.log
+
+# 检查socket连接
+netstat -an | grep logger
+lsof | grep logger
+```
+
+### 性能监控
+
+```bash
+# 监控日志写入性能
+iostat -x 1
+
+# 监控内存使用
+top -p $(pgrep logger_daemon)
+
+# 监控磁盘使用
+watch -n 5 'df -h /data/logs'
+
+# 监控文件描述符使用
+lsof -p $(pgrep logger_daemon) | wc -l
+```
+
+## 📋 最佳实践
+
+### 1. 部署建议
+
+- **使用绝对路径**: 所有文件和socket路径都使用绝对路径
+- **设置合适的缓冲区大小**: 根据日志量调整缓冲区大小
+- **监控磁盘空间**: 使用大日志文件时监控磁盘使用
+- **使用守护模式**: 生产环境部署时使用后台模式
+- **实施日志轮转监控**: 防止磁盘空间耗尽
+
+### 2. 安全考虑
+
+- **限制日志文件访问权限**: 设置适当的文件权限
+- **使用安全的socket路径**: 避免在公共目录创建socket
+- **定期清理敏感日志**: 定期删除包含敏感信息的日志
+- **避免记录敏感数据**: 不要在日志中记录密码等敏感信息
+
+### 3. 性能优化
+
+- **根据负载调整配置**: 高负载时增加缓冲区和刷新间隔
+- **合理设置日志级别**: 生产环境使用warn级别以上
+- **避免深层目录监控**: 限制文件监控的深度
+- **使用文件过滤**: 减少不必要的文件事件处理
+
+### 4. 监控和维护
+
+- **实施健康检查**: 定期检查守护进程状态
+- **监控资源使用**: 监控CPU、内存和磁盘使用
+- **备份重要日志**: 定期备份关键日志文件
+- **自动化部署**: 使用脚本自动化工具部署和管理
+
+## 🔗 相关文档
+
+- [LoggerAPI参考](/api/logger-api) - 程序化日志接口
+- [FileWatcherAPI参考](/api/filewatcher-api) - 程序化文件监控接口
+- [系统工具指南](/guide/system-tools) - 系统工具使用指南
+- [开发API指南](/guide/development-api) - API开发和集成指南
+- [性能优化指南](/guide/performance) - 性能优化策略
+- [基础使用示例](/examples/basic-usage) - 完整集成示例
