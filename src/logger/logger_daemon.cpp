@@ -35,7 +35,7 @@ void emergency_signal_handler(int) noexcept {
     if (global_buffer && global_file_mgr && !global_buffer->is_empty()) {
         const auto data = global_buffer->get_data();
         if (!data.empty()) {
-            (void)global_file_mgr->write(data);
+            (void)global_file_mgr->write(std::string_view{data.data(), data.size()});
             global_buffer->clear();
         }
     }
@@ -86,7 +86,7 @@ void process_batch_message(std::string_view buffer, BufferManager& buf_mgr, File
         if (!buf_mgr.add_log(log_entry, level)) {
             const auto data = buf_mgr.get_data();
             if (!data.empty()) {
-                (void)file_mgr.write(data);
+                (void)file_mgr.write(std::string_view{data.data(), data.size()});
                 buf_mgr.clear();
             }
             (void)buf_mgr.add_log(log_entry, level);
@@ -98,7 +98,7 @@ void process_batch_message(std::string_view buffer, BufferManager& buf_mgr, File
     if (has_critical) {
         const auto data = buf_mgr.get_data();
         if (!data.empty()) {
-            (void)file_mgr.write(data);
+            (void)file_mgr.write(std::string_view{data.data(), data.size()});
             file_mgr.flush();
             buf_mgr.clear();
         }
@@ -120,7 +120,7 @@ void process_single_message(std::string_view buffer, BufferManager& buf_mgr, Fil
     if (!buf_mgr.add_log(log_entry, level)) {
         const auto data = buf_mgr.get_data();
         if (!data.empty()) {
-            (void)file_mgr.write(data);
+            (void)file_mgr.write(std::string_view{data.data(), data.size()});
             buf_mgr.clear();
         }
         (void)buf_mgr.add_log(log_entry, level);
@@ -129,7 +129,7 @@ void process_single_message(std::string_view buffer, BufferManager& buf_mgr, Fil
     if (level >= LogLevel::CRITICAL) {
         const auto data = buf_mgr.get_data();
         if (!data.empty()) {
-            (void)file_mgr.write(data);
+            (void)file_mgr.write(std::string_view{data.data(), data.size()});
             file_mgr.flush();
             buf_mgr.clear();
         }
@@ -209,7 +209,7 @@ int main(int argc, const char* const argv[]) {
         if (global_buffer->should_flush() || global_buffer->should_force_flush() || should_force) {
             const auto data = global_buffer->get_data();
             if (!data.empty()) {
-                (void)global_file_mgr->write(data);
+                (void)global_file_mgr->write(std::string_view{data.data(), data.size()});
                 if (should_force) {
                     global_file_mgr->flush();
                 }
@@ -221,7 +221,7 @@ int main(int argc, const char* const argv[]) {
     
     const auto data = global_buffer->get_data();
     if (!data.empty()) {
-        (void)global_file_mgr->write(data);
+        (void)global_file_mgr->write(std::string_view{data.data(), data.size()});
         global_file_mgr->flush();
     }
     
