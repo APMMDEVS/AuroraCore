@@ -60,7 +60,6 @@ void process_batch_message(std::string_view buffer, BufferManager& buf_mgr, File
     
     size_t offset = 1;
     bool has_critical = false;
-    const auto now = std::time(nullptr);
     
     while (offset < buffer.size()) {
         if (offset >= buffer.size()) break;

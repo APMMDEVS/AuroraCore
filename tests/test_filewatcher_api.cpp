@@ -12,7 +12,7 @@ std::atomic<int> event_count{0};
 
 void file_event_handler(const FileWatcherAPI::FileEvent& event) noexcept {
     std::cout << "File event: " << FileWatcherAPI::event_type_to_string(event.type)
-              << " on " << event.path.string();
+              << " on " << event.path;
     if (!event.filename.empty()) {
         std::cout << "/" << event.filename;
     }
@@ -36,7 +36,7 @@ int main() {
         FileWatcherAPI::EventType::DELETE
     });
     
-    if (!watcher.add_watch(test_dir, file_event_handler, events)) {
+    if (!watcher.add_watch(std::string{test_dir}, file_event_handler, events)) {
         std::cout << "✗ Failed to add watch\n";
         return 1;
     }

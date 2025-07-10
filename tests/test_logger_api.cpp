@@ -16,12 +16,11 @@ int main() {
     mkdir(test_dir.data(), 0755);
     
     // Test 1: Basic logging
-    LoggerAPI::InternalLogger::Config config{
-        .log_path = "test_data/test.log",
-        .max_file_size = 1024, // 1KB for testing
-        .max_files = 3,
-        .flush_interval_ms = 100
-    };
+    LoggerAPI::InternalLogger::Config config;
+    config.log_path = "test_data/test.log";
+    config.max_file_size = 1024; // 1KB for testing
+    config.max_files = 3;
+    config.flush_interval_ms = 100;
     
     LoggerAPI::init_logger(config);
     
