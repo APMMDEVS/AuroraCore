@@ -17,7 +17,7 @@ set_target_properties(logger_daemon logger_client PROPERTIES
     CXX_EXTENSIONS OFF
 )
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     target_compile_options(logger_daemon PRIVATE 
         -Os -fno-exceptions -fno-rtti -ffast-math -fno-stack-protector
         -fmerge-all-constants -fno-unwind-tables -fno-asynchronous-unwind-tables
@@ -32,6 +32,21 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang
     )
     target_link_options(logger_daemon PRIVATE -flto=thin -Wl,--gc-sections -Wl,--strip-all)
     target_link_options(logger_client PRIVATE -flto=thin -Wl,--gc-sections -Wl,--strip-all)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(logger_daemon PRIVATE 
+        -Os -fno-exceptions -fno-rtti -ffast-math -fno-stack-protector
+        -fmerge-all-constants -fno-unwind-tables -fno-asynchronous-unwind-tables
+        -fvisibility=hidden -fvisibility-inlines-hidden -flto
+        -DANDROID_DOZE_AWARE -DLOW_POWER_MODE
+    )
+    target_compile_options(logger_client PRIVATE 
+        -Os -fno-exceptions -fno-rtti -ffast-math -fno-stack-protector
+        -fmerge-all-constants -fno-unwind-tables -fno-asynchronous-unwind-tables
+        -fvisibility=hidden -fvisibility-inlines-hidden -flto
+        -DANDROID_DOZE_AWARE -DLOW_POWER_MODE
+    )
+    target_link_options(logger_daemon PRIVATE -flto -Wl,--gc-sections -Wl,--strip-all)
+    target_link_options(logger_client PRIVATE -flto -Wl,--gc-sections -Wl,--strip-all)
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_options(logger_daemon PRIVATE /GR- /EHsc /Os /GL /Gy /DANDROID_DOZE_AWARE /DLOW_POWER_MODE)
     target_compile_options(logger_client PRIVATE /GR- /EHsc /Os /GL /Gy /DANDROID_DOZE_AWARE /DLOW_POWER_MODE)
