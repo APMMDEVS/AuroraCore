@@ -124,8 +124,6 @@ void WatcherCore::set_one_shot(bool enabled) noexcept {
 }
 
 void WatcherCore::periodic_check() noexcept {
-    const auto now = std::chrono::steady_clock::now();
-    
     for (auto& [wd, watch_info] : watches_) {
         if (file_changed(watch_info.path, watch_info.last_check)) {
             execute_command(watch_info.command, watch_info.path, nullptr);

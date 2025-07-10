@@ -33,11 +33,13 @@ public:
     [[nodiscard]] bool send(std::string_view message, LogLevel level = LogLevel::INFO) noexcept;
     [[nodiscard]] bool batch_send(std::span<const std::string_view> messages, std::span<const LogLevel> levels) noexcept;
     
-    void debug(std::string_view message) noexcept { send(message, LogLevel::DEBUG); }
-    void info(std::string_view message) noexcept { send(message, LogLevel::INFO); }
-    void warning(std::string_view message) noexcept { send(message, LogLevel::WARNING); }
-    void error(std::string_view message) noexcept { send(message, LogLevel::ERROR); }
-    void critical(std::string_view message) noexcept { send(message, LogLevel::CRITICAL); }
+    void debug(std::string_view message) noexcept { (void)send(message, LogLevel::DEBUG); }
+    void info(std::string_view message) noexcept { (void)send(message, LogLevel::INFO); }
+    void warning(std::string_view message) noexcept { (void)send(message, LogLevel::WARNING); }
+    void error(std::string_view message) noexcept { (void)send(message, LogLevel::ERROR); }
+    void critical(std::string_view message) noexcept { (void)send(message, LogLevel::CRITICAL); }
+    
+    void set_daemon_pid(int pid);
     
 private:
     std::atomic<int> sock_fd_{-1};

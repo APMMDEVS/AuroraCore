@@ -77,7 +77,6 @@ bool IPCClient::send(std::string_view message, LogLevel level) noexcept {
         return false;
     }
     
-    const auto now = std::time(nullptr);
     std::ostringstream oss;
     oss << level_to_char(level) << message << "\n";
     const auto formatted = oss.str();
