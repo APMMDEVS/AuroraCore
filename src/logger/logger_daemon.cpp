@@ -31,11 +31,11 @@ void signal_handler(int sig) noexcept {
     force_flush.store(true, std::memory_order_relaxed);
 }
 
-void emergency_signal_handler(int sig) noexcept {
+void emergency_signal_handler(int) noexcept {
     if (global_buffer && global_file_mgr && !global_buffer->is_empty()) {
         const auto data = global_buffer->get_data();
         if (!data.empty()) {
-            global_file_mgr->write(data.data(), data.size());
+            (void)global_file_mgr->write(data);
             global_buffer->clear();
         }
     }
@@ -86,10 +86,10 @@ void process_batch_message(std::string_view buffer, BufferManager& buf_mgr, File
         if (!buf_mgr.add_log(log_entry, level)) {
             const auto data = buf_mgr.get_data();
             if (!data.empty()) {
-                file_mgr.write(data.data(), data.size());
+                (void)file_mgr.write(data);
                 buf_mgr.clear();
             }
-            buf_mgr.add_log(log_entry, level);
+            (void)buf_mgr.add_log(log_entry, level);
         }
         
         offset = msg_start + 1;
@@ -98,7 +98,7 @@ void process_batch_message(std::string_view buffer, BufferManager& buf_mgr, File
     if (has_critical) {
         const auto data = buf_mgr.get_data();
         if (!data.empty()) {
-            file_mgr.write(data.data(), data.size());
+            (void)file_mgr.write(data);
             file_mgr.flush();
             buf_mgr.clear();
         }
@@ -120,16 +120,16 @@ void process_single_message(std::string_view buffer, BufferManager& buf_mgr, Fil
     if (!buf_mgr.add_log(log_entry, level)) {
         const auto data = buf_mgr.get_data();
         if (!data.empty()) {
-            file_mgr.write(data.data(), data.size());
+            (void)file_mgr.write(data);
             buf_mgr.clear();
         }
-        buf_mgr.add_log(log_entry, level);
+        (void)buf_mgr.add_log(log_entry, level);
     }
     
     if (level >= LogLevel::CRITICAL) {
         const auto data = buf_mgr.get_data();
         if (!data.empty()) {
-            file_mgr.write(data.data(), data.size());
+            (void)file_mgr.write(data);
             file_mgr.flush();
             buf_mgr.clear();
         }
@@ -209,7 +209,7 @@ int main(int argc, const char* const argv[]) {
         if (global_buffer->should_flush() || global_buffer->should_force_flush() || should_force) {
             const auto data = global_buffer->get_data();
             if (!data.empty()) {
-                global_file_mgr->write(data.data(), data.size());
+                (void)global_file_mgr->write(data);
                 if (should_force) {
                     global_file_mgr->flush();
                 }
@@ -221,7 +221,7 @@ int main(int argc, const char* const argv[]) {
     
     const auto data = global_buffer->get_data();
     if (!data.empty()) {
-        global_file_mgr->write(data.data(), data.size());
+        (void)global_file_mgr->write(data);
         global_file_mgr->flush();
     }
     

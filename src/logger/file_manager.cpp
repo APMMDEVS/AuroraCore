@@ -7,7 +7,7 @@
 
 FileManager::FileManager(std::string_view base_path, size_t max_size, int max_files) noexcept
     : base_path_(base_path), fd_(-1), max_file_size_(max_size), max_files_(max_files) {
-    open_file();
+    (void)open_file();
 }
 
 FileManager::~FileManager() noexcept {
@@ -79,5 +79,5 @@ void FileManager::rotate_file() noexcept {
     rename(base_path_.c_str(), backup_path.c_str());
     
     current_size_.store(0, std::memory_order_relaxed);
-    open_file();
+    (void)open_file();
 }
